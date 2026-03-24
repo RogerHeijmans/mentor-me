@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>Mentor.Me — Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Poppins', sans-serif; background: #F2F2F2; color: #010326; min-height: 100vh; -webkit-tap-highlight-color: transparent; }
+    /* iOS: make all clickable divs actually tappable */
+    [onclick] { cursor: pointer; }
+    button { cursor: pointer; font-family: inherit; border: none; }
+    input { font-family: inherit; }
+
+    /* ===== APP SHELL ===== */
+    .app-shell { display: flex; flex-direction: column; min-height: 100vh; max-width: 430px; margin: 0 auto; background: #F2F2F2; position: relative; }
+    .main-content { flex: 1; overflow-y: auto; padding-bottom: max(80px, calc(60px + env(safe-area-inset-bottom))); -webkit-overflow-scrolling: touch; }
+
+    /* ===== TOP NAV ===== */
+    .top-nav { background: #fff; padding: 12px 20px 10px; border-bottom: 1px solid #f0eef4; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .top-nav .brand { font-size: 20px; font-weight: 800; color: #93134B; }
+    .top-nav .brand span { color: #010326; }
+    .top-nav .eu-logo { display: flex; align-items: center; gap: 6px; padding: 4px 8px; background: #010326; border-radius: 8px; flex-shrink: 0; }
+    .top-nav .eu-logo .eu-e { font-size: 13px; font-weight: 800; color: #EBD3DF; letter-spacing: -0.02em; }
+    .top-nav .eu-logo .eu-sup { font-size: 8px; font-weight: 800; color: #F25781; vertical-align: super; line-height: 0; }
+    .top-nav .eu-logo .eu-udres { font-size: 10px; font-weight: 700; color: #F2F2F2; letter-spacing: 0.04em; }
+    .top-nav .eu-logo .eu-sup2 { font-size: 8px; font-weight: 800; color: #758EBF; vertical-align: super; line-height: 0; }
+    .top-nav .role-badge { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: #EBD3DF; color: #93134B; }
+    .top-nav .role-badge.mentor { background: #DDE6F3; color: #758EBF; }
+    .top-nav .avatar-btn { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; border: 2px solid #EBD3DF; cursor: pointer; overflow: hidden; padding: 0; }
+    .top-nav .avatar-btn img { width: 100%; height: 100%; object-fit: cover; object-position: center top; border-radius: 50%; }
+
+    /* ===== BOTTOM NAV ===== */
+    .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #fff; border-top: 1px solid #f0eef4; display: flex; padding: 8px 0 0; padding-bottom: max(12px, env(safe-area-inset-bottom)); z-index: 100; }
+    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0; cursor: pointer; border: none; background: none; }
+    .nav-item .nav-icon { font-size: 20px; line-height: 1; }
+    .nav-item .nav-label { font-size: 10px; font-weight: 600; color: #aaa; letter-spacing: 0.03em; }
+    .nav-item.active .nav-label { color: #93134B; }
+    .nav-item.active .nav-icon { filter: none; }
+
+    /* ===== SPLASH SCREEN ===== */
+    .splash { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 32px; background: linear-gradient(160deg, #F2F2F2 0%, #EBD3DF 60%, #DDE6F3 100%); }
+    .splash-logo { font-size: 48px; font-weight: 800; color: #93134B; margin-bottom: 4px; }
+    .splash-logo span { color: #010326; }
+    .splash-tagline { font-size: 15px; color: #666; text-align: center; margin-bottom: 48px; line-height: 1.5; }
+    .splash-roles { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px; }
+    .role-card { background: #fff; border-radius: 16px; padding: 22px 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: 2px solid transparent; text-align: left; display: flex; align-items: center; gap: 16px; }
+    .role-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.12); }
+    .role-card.startup:hover { border-color: #93134B; }
+    .role-card.mentor:hover { border-color: #758EBF; }
+    .role-icon { font-size: 36px; }
+    .role-info .role-title { font-size: 17px; font-weight: 700; margin-bottom: 3px; }
+    .role-card.startup .role-info .role-title { color: #93134B; }
+    .role-card.mentor .role-info .role-title { color: #758EBF; }
+    .role-info .role-desc { font-size: 13px; color: #666; line-height: 1.4; }
+    .splash-footer { margin-top: 40px; font-size: 12px; color: #aaa; text-align: center; }
+
+    /* ===== SECTION HEADER ===== */
+    .section-header { padding: 20px 20px 0; }
+    .section-header h2 { font-size: 22px; font-weight: 700; }
+    .section-header p { font-size: 13px; color: #888; margin-top: 2px; }
+
+    /* ===== DASHBOARD ===== */
+    .dashboard-hello { padding: 20px 20px 0; }
+    .dashboard-hello .hello-line { font-size: 13px; color: #888; }
+    .dashboard-hello .hello-name { font-size: 24px; font-weight: 800; color: #010326; }
+    .dashboard-hello .hello-sub { font-size: 13px; color: #666; margin-top: 2px; }
+
+    .stats-row { display: flex; gap: 12px; padding: 18px 20px 0; }
+    .stat-card { flex: 1; background: #fff; border-radius: 14px; padding: 14px 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .stat-card .stat-value { font-size: 26px; font-weight: 800; }
+    .stat-card .stat-label { font-size: 11px; color: #888; font-weight: 500; margin-top: 1px; }
+    .stat-card.pink .stat-value { color: #93134B; }
+    .stat-card.blue .stat-value { color: #758EBF; }
+    .stat-card.green .stat-value { color: #3DB742; }
+
+    .section-title { font-size: 13px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.08em; padding: 20px 20px 10px; }
+
+    /* ===== MATCH CARDS ===== */
+    .match-card { background: #fff; border-radius: 16px; padding: 16px; margin: 0 20px 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; display: flex; gap: 14px; align-items: flex-start; }
+    .match-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+    .mentor-avatar { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .match-info { flex: 1; min-width: 0; }
+    .match-info .mentor-name { font-size: 15px; font-weight: 700; }
+    .match-info .mentor-title { font-size: 12px; color: #888; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .match-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .tag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; }
+    .tag.pink { background: #EBD3DF; color: #93134B; }
+    .tag.blue { background: #DDE6F3; color: #758EBF; }
+    .tag.green { background: #D5EED6; color: #3DB742; }
+    .tag.amber { background: #FEF4CC; color: #C8970A; }
+    .tag.purple { background: #FDDDE8; color: #F25781; }
+    .tag.gray { background: #f0eef4; color: #666; }
+    .match-score-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .match-score { font-size: 18px; font-weight: 800; color: #3DB742; }
+    .match-score-label { font-size: 10px; color: #aaa; font-weight: 600; }
+    .score-bar { width: 48px; height: 4px; background: #e8e4ef; border-radius: 999px; overflow: hidden; }
+    .score-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #3DB742, #3DB742); }
+
+    /* ===== AI MATCH BANNER ===== */
+    .ai-banner { margin: 0 20px 12px; background: linear-gradient(135deg, #010326, #93134B); border-radius: 16px; padding: 16px 18px; color: #fff; cursor: pointer; transition: opacity 0.2s; }
+    .ai-banner:hover { opacity: 0.92; }
+    .ai-banner .ai-label { font-size: 11px; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.08em; }
+    .ai-banner .ai-title { font-size: 17px; font-weight: 700; margin-top: 4px; }
+    .ai-banner .ai-sub { font-size: 12px; opacity: 0.75; margin-top: 3px; }
+    .ai-banner .ai-arrow { float: right; font-size: 22px; margin-top: -2px; }
+
+    /* ===== SESSION CARD ===== */
+    .session-card { background: #fff; border-radius: 16px; padding: 16px 18px; margin: 0 20px 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); cursor: pointer; transition: transform 0.2s; border-left: 4px solid #93134B; }
+    .session-card:hover { transform: translateY(-2px); }
+    .session-card.blue-border { border-left-color: #758EBF; }
+    .session-card.green-border { border-left-color: #3DB742; }
+    .session-card .session-meta { font-size: 11px; font-weight: 600; color: #93134B; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+    .session-card.blue-border .session-meta { color: #758EBF; }
+    .session-card.green-border .session-meta { color: #3DB742; }
+    .session-card .session-title { font-size: 15px; font-weight: 700; }
+    .session-card .session-with { font-size: 12px; color: #888; margin-top: 2px; }
+    .session-card .session-status { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-top: 8px; }
+    .status-upcoming { background: #EBD3DF; color: #93134B; }
+    .status-completed { background: #D5EED6; color: #3DB742; }
+    .status-cancelled { background: #f0eef4; color: #888; }
+
+    /* ===== DISCOVER ===== */
+    .search-bar { margin: 16px 20px 0; position: relative; }
+    .search-bar input { width: 100%; padding: 12px 16px 12px 42px; border-radius: 12px; border: 1.5px solid #e8e4ef; font-size: 14px; background: #fff; outline: none; transition: border-color 0.2s; }
+    .search-bar input:focus { border-color: #93134B; }
+    .search-bar .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 16px; }
+
+    .filter-row { display: flex; gap: 8px; padding: 12px 20px 0; overflow-x: auto; scrollbar-width: none; -webkit-scrollbar: none; }
+    .filter-row::-webkit-scrollbar { display: none; }
+    .filter-chip { flex-shrink: 0; padding: 7px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; border: 1.5px solid #e8e4ef; background: #fff; color: #666; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+    .filter-chip:hover, .filter-chip.active { background: #93134B; border-color: #93134B; color: #fff; }
+    .filter-chip.blue.active { background: #758EBF; border-color: #758EBF; }
+
+    .mentor-grid { padding: 16px 20px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .mentor-grid-card { background: #fff; border-radius: 16px; padding: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+    .mentor-grid-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+    .mentor-grid-card .card-avatar { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+    .mentor-grid-card .card-name { font-size: 14px; font-weight: 700; line-height: 1.2; }
+    .mentor-grid-card .card-role { font-size: 11px; color: #888; margin-top: 2px; margin-bottom: 8px; }
+    .mentor-grid-card .card-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .mentor-grid-card .card-rating { font-size: 11px; color: #C8970A; margin-top: 8px; font-weight: 600; }
+
+    /* ===== MENTOR PROFILE ===== */
+    .profile-hero { background: #fff; padding: 24px 20px 20px; }
+    .back-btn { font-size: 13px; font-weight: 600; color: #93134B; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; margin-bottom: 16px; background: none; border: none; padding: 0; }
+    .profile-hero-inner { display: flex; gap: 16px; align-items: flex-start; }
+    .profile-avatar-large { width: 72px; height: 72px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .profile-hero-info .profile-name { font-size: 22px; font-weight: 800; }
+    .profile-hero-info .profile-title { font-size: 13px; color: #666; margin-top: 2px; }
+    .profile-hero-info .profile-location { font-size: 12px; color: #aaa; margin-top: 4px; }
+    .profile-rating-row { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+    .profile-rating { font-size: 13px; font-weight: 700; color: #C8970A; }
+    .profile-sessions-count { font-size: 12px; color: #888; }
+
+    .profile-section { padding: 18px 20px 0; }
+    .profile-section h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #888; margin-bottom: 10px; }
+    .profile-bio { font-size: 14px; color: #444; line-height: 1.6; }
+    .tags-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+    .availability-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .avail-slot { background: #D5EED6; border-radius: 10px; padding: 10px 8px; text-align: center; }
+    .avail-slot .avail-day { font-size: 11px; font-weight: 700; color: #3DB742; }
+    .avail-slot .avail-time { font-size: 10px; color: #666; margin-top: 2px; }
+
+    .book-cta { margin: 24px 20px 30px; }
+    .btn-primary { width: 100%; padding: 16px; background: #93134B; color: #fff; border-radius: 14px; font-size: 16px; font-weight: 700; border: none; cursor: pointer; transition: opacity 0.2s, transform 0.15s; }
+    .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-primary.blue { background: #758EBF; }
+    .btn-primary.green { background: #3DB742; }
+    .btn-secondary { width: 100%; padding: 14px; background: #f0eef4; color: #010326; border-radius: 14px; font-size: 15px; font-weight: 600; border: none; cursor: pointer; margin-top: 10px; transition: background 0.15s; }
+    .btn-secondary:hover { background: #e8e4ef; }
+
+    /* ===== BOOKING FLOW ===== */
+    .booking-screen { padding: 0 20px 30px; }
+    .booking-progress { display: flex; gap: 8px; padding: 20px 20px 16px; }
+    .progress-step { flex: 1; height: 4px; border-radius: 999px; background: #e8e4ef; }
+    .progress-step.done { background: #93134B; }
+    .progress-step.active { background: #93134B; }
+    .booking-step-label { font-size: 12px; color: #888; font-weight: 500; padding: 0 20px; margin-bottom: 16px; }
+    .booking-step-label strong { color: #010326; }
+
+    .topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .topic-card { background: #fff; border-radius: 14px; padding: 14px; border: 2px solid #e8e4ef; cursor: pointer; transition: all 0.15s; }
+    .topic-card:hover, .topic-card.selected { border-color: #93134B; background: #EBD3DF; }
+    .topic-card .topic-icon { font-size: 24px; margin-bottom: 6px; }
+    .topic-card .topic-name { font-size: 13px; font-weight: 600; color: #010326; }
+
+    .date-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
+    .date-btn { background: #fff; border: 2px solid #e8e4ef; border-radius: 12px; padding: 10px 6px; text-align: center; cursor: pointer; transition: all 0.15s; }
+    .date-btn:hover, .date-btn.selected { border-color: #93134B; background: #EBD3DF; }
+    .date-btn .date-day { font-size: 10px; font-weight: 600; color: #888; }
+    .date-btn .date-num { font-size: 18px; font-weight: 700; color: #010326; }
+    .date-btn.selected .date-day, .date-btn.selected .date-num { color: #93134B; }
+    .time-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .time-btn { background: #fff; border: 2px solid #e8e4ef; border-radius: 12px; padding: 12px 8px; text-align: center; cursor: pointer; font-size: 13px; font-weight: 600; color: #666; transition: all 0.15s; }
+    .time-btn:hover, .time-btn.selected { border-color: #93134B; background: #EBD3DF; color: #93134B; }
+    .time-btn.unavailable { opacity: 0.4; cursor: not-allowed; }
+    .time-btn.unavailable:hover { border-color: #e8e4ef; background: #fff; color: #666; }
+
+    .confirm-card { background: #fff; border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+    .confirm-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0eef4; }
+    .confirm-row:last-child { border-bottom: none; }
+    .confirm-row .label { font-size: 13px; color: #888; }
+    .confirm-row .value { font-size: 13px; font-weight: 600; color: #010326; }
+
+    /* ===== MY SESSIONS ===== */
+    .sessions-tabs { display: flex; padding: 16px 20px 0; gap: 8px; }
+    .tab-btn { flex: 1; padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; border: 1.5px solid #e8e4ef; background: #fff; color: #888; }
+    .tab-btn.active { background: #93134B; border-color: #93134B; color: #fff; }
+
+    /* ===== PROFILE PAGE ===== */
+    .profile-page { padding: 20px; }
+    .profile-page-hero { background: #fff; border-radius: 18px; padding: 24px; text-align: center; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .profile-page-avatar { width: 90px; height: 90px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; color: #fff; margin: 0 auto 12px; overflow: hidden; border: 3px solid #EBD3DF; }
+    .profile-page-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+    .profile-page-hero .p-name { font-size: 20px; font-weight: 800; }
+    .profile-page-hero .p-role { font-size: 13px; color: #888; margin-top: 3px; }
+    .profile-info-card { background: #fff; border-radius: 16px; padding: 18px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .profile-info-card h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #888; margin-bottom: 12px; }
+    .info-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid #f0eef4; }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .info-label { font-size: 12px; color: #888; }
+    .info-row .info-value { font-size: 13px; font-weight: 600; color: #010326; text-align: right; max-width: 60%; }
+
+    /* ===== SUCCESS / CONFIRM ===== */
+    .success-screen { padding: 60px 32px; text-align: center; }
+    .success-icon { font-size: 72px; margin-bottom: 16px; }
+    .success-screen h2 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+    .success-screen p { font-size: 14px; color: #666; margin-bottom: 32px; line-height: 1.5; }
+
+    /* ===== MENTOR DASHBOARD ===== */
+    .request-card { background: #fff; border-radius: 16px; padding: 16px 18px; margin: 0 20px 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border-left: 4px solid #758EBF; }
+    .request-card .req-from { font-size: 12px; font-weight: 600; color: #758EBF; }
+    .request-card .req-title { font-size: 15px; font-weight: 700; margin-top: 2px; }
+    .request-card .req-meta { font-size: 12px; color: #888; margin-top: 4px; }
+    .request-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .btn-accept { flex: 1; padding: 9px; background: #3DB742; color: #fff; border-radius: 9px; font-size: 12px; font-weight: 700; border: none; cursor: pointer; }
+    .btn-decline { flex: 1; padding: 9px; background: #f0eef4; color: #666; border-radius: 9px; font-size: 12px; font-weight: 600; border: none; cursor: pointer; }
+
+    /* ===== AI ASSISTANT ===== */
+    .ai-screen { padding: 16px 20px; }
+    .ai-header { background: linear-gradient(135deg, #010326, #93134B); border-radius: 16px; padding: 18px; color: #fff; margin-bottom: 16px; }
+    .ai-header .ai-h-label { font-size: 11px; opacity: 0.7; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+    .ai-header .ai-h-title { font-size: 20px; font-weight: 800; margin-top: 4px; }
+    .ai-header .ai-h-sub { font-size: 12px; opacity: 0.75; margin-top: 4px; }
+    .ai-matches { }
+    .ai-match-row { background: #fff; border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; cursor: pointer; transition: transform 0.15s; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .ai-match-row:hover { transform: translateY(-2px); }
+    .ai-match-row .ai-mentor-info { flex: 1; }
+    .ai-match-row .ai-mentor-name { font-size: 14px; font-weight: 700; }
+    .ai-match-row .ai-mentor-why { font-size: 12px; color: #666; margin-top: 2px; line-height: 1.4; }
+    .ai-score-circle { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #3DB742, #3DB742); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 800; flex-shrink: 0; }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state { text-align: center; padding: 48px 32px; }
+    .empty-state .empty-icon { font-size: 56px; margin-bottom: 12px; }
+    .empty-state h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .empty-state p { font-size: 13px; color: #888; line-height: 1.5; }
+
+    /* ===== MISC ===== */
+    .divider { height: 1px; background: #f0eef4; margin: 4px 20px; }
+    .spacer { height: 20px; }
+    .badge-new { display: inline-block; background: #93134B; color: #fff; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 999px; margin-left: 4px; vertical-align: middle; }
+  </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ============================================================
+   DATA LAYER — Mentor.Me Portal Mock Data
+   ============================================================ */
+
+const MENTORS = [
+  {
+    id: 1,
+    name: "Sarah Chen",
+    initials: "SC",
+    color: "#93134B",
+    title: "Serial Entrepreneur & Angel Investor",
+    company: "ex-Stripe, 2 exits",
+    location: "Brussels, BE",
+    bio: "I've built and sold two SaaS companies and now invest in early-stage startups across Europe. My focus is product-market fit and fundraising strategy. I love working with founders who are deeply curious about their customers.",
+    expertise: ["Fundraising", "Product-Market Fit", "SaaS", "Go-to-Market"],
+    industries: ["FinTech", "B2B SaaS", "Marketplaces"],
+    languages: ["English", "Mandarin", "French"],
+    rating: 4.9,
+    sessions: 87,
+    availability: [
+      { day: "Mon", time: "09:00–12:00" },
+      { day: "Wed", time: "14:00–17:00" },
+      { day: "Fri", time: "10:00–13:00" },
+    ],
+    matchScore: 94,
+    matchReasons: ["Fundraising expertise matches your Stage A goal", "2 successful SaaS exits", "Available in your timezone"],
+  },
+  {
+    id: 2,
+    name: "Nico Dubois",
+    initials: "ND",
+    color: "#758EBF",
+    title: "Product Lead & UX Strategist",
+    company: "Spotify (ex-Zalando)",
+    location: "Ghent, BE",
+    bio: "10 years designing and shipping products used by millions. I help founders think clearly about user needs, prioritise ruthlessly, and build products people love. Specialised in consumer apps and digital marketplaces.",
+    expertise: ["Product Strategy", "UX Design", "Agile", "User Research"],
+    industries: ["Consumer Tech", "E-commerce", "EdTech"],
+    languages: ["French", "English", "Dutch"],
+    rating: 4.8,
+    sessions: 63,
+    availability: [
+      { day: "Tue", time: "09:00–12:00" },
+      { day: "Thu", time: "15:00–18:00" },
+      { day: "Sat", time: "10:00–12:00" },
+    ],
+    matchScore: 88,
+    matchReasons: ["Product design background aligns with your MVP phase", "Consumer tech experience", "EdTech sector interest"],
+  },
+  {
+    id: 3,
+    name: "Amara Diallo",
+    initials: "AD",
+    color: "#3DB742",
+    title: "Impact Entrepreneur & Ecosystem Builder",
+    company: "Founder @ RuralBridge",
+    location: "Leuven, BE",
+    bio: "I founded RuralBridge to connect rural entrepreneurs with urban resources. I know what it's like to build with limited resources and a big mission. I mentor founders working on social impact, sustainability, and regional development.",
+    expertise: ["Impact Business", "Rural Innovation", "Community Building", "Grant Writing"],
+    industries: ["AgriTech", "Social Enterprise", "Regional Development"],
+    languages: ["English", "Wolof", "French"],
+    rating: 4.9,
+    sessions: 45,
+    availability: [
+      { day: "Mon", time: "14:00–17:00" },
+      { day: "Wed", time: "09:00–12:00" },
+      { day: "Fri", time: "14:00–16:00" },
+    ],
+    matchScore: 79,
+    matchReasons: ["Rural ecosystem expertise", "Impact mission alignment", "Grant funding knowledge"],
+  },
+  {
+    id: 4,
+    name: "Lars Henriksen",
+    initials: "LH",
+    color: "#C8970A",
+    title: "CTO & Tech Architect",
+    company: "ex-Philips, 2 startups",
+    location: "Antwerp, BE",
+    bio: "Engineer turned CTO, I help technical and non-technical founders navigate the technology choices that define your company's future. Specialised in scalable architecture, AI integration, and building lean engineering teams.",
+    expertise: ["Tech Architecture", "AI/ML", "Scaling Engineering", "CTO Coaching"],
+    industries: ["HealthTech", "MedTech", "Industrial Tech"],
+    languages: ["English", "Danish", "German"],
+    rating: 4.7,
+    sessions: 112,
+    availability: [
+      { day: "Tue", time: "14:00–18:00" },
+      { day: "Thu", time: "09:00–12:00" },
+      { day: "Fri", time: "09:00–11:00" },
+    ],
+    matchScore: 72,
+    matchReasons: ["Deep AI/ML expertise", "CTO coaching experience", "HealthTech network"],
+  },
+  {
+    id: 5,
+    name: "Priya Nair",
+    initials: "PN",
+    color: "#F25781",
+    title: "Marketing & Growth Expert",
+    company: "Freelance — ex-HubSpot",
+    location: "Brussels, BE",
+    bio: "I've helped 40+ startups go from 0 to their first 1000 users. My approach combines positioning, content strategy, and community-led growth. I'm especially good at helping founders find their unique voice and story.",
+    expertise: ["Growth Marketing", "Positioning", "Content Strategy", "Community"],
+    industries: ["B2B SaaS", "Consumer Apps", "EdTech"],
+    languages: ["English", "Hindi", "Dutch"],
+    rating: 4.8,
+    sessions: 58,
+    availability: [
+      { day: "Mon", time: "10:00–13:00" },
+      { day: "Wed", time: "14:00–17:00" },
+      { day: "Thu", time: "09:00–11:00" },
+    ],
+    matchScore: 85,
+    matchReasons: ["Startup growth specialist", "EdTech sector experience", "Storytelling & positioning"],
+  },
+  {
+    id: 6,
+    name: "Jonas Weiss",
+    initials: "JW",
+    color: "#010326",
+    title: "CFO & Financial Strategist",
+    company: "Finance Partner @ Scale",
+    location: "Leuven, BE",
+    bio: "I help founders understand their numbers, structure their business model, and prepare for investor conversations. Whether it's unit economics, pricing, or building a financial model — I make finance accessible for founders.",
+    expertise: ["Financial Modeling", "Unit Economics", "Pricing", "Investor Readiness"],
+    industries: ["SaaS", "Marketplaces", "EdTech"],
+    languages: ["English", "German", "French"],
+    rating: 4.6,
+    sessions: 34,
+    availability: [
+      { day: "Tue", time: "09:00–12:00" },
+      { day: "Thu", time: "14:00–17:00" },
+    ],
+    matchScore: 68,
+    matchReasons: ["Financial modeling for pre-seed stage", "SaaS unit economics", "Investor pitch prep"],
+  },
+];
+
+const MY_STARTUP = {
+  id: "s1",
+  name: "Alex Martens",
+  startupName: "SkillBridge",
+  initials: "AM",
+  color: "#93134B",
+  stage: "Validation",
+  sector: "EdTech",
+  challenge: "We need help defining our go-to-market strategy and connecting with our first enterprise clients.",
+  location: "Ghent, BE",
+  founded: "2025",
+  team: "3 co-founders",
+  website: "skillbridge.be",
+};
+
+const MY_MENTOR_PROFILE = {
+  id: "m0",
+  name: "Roger Heijmans",
+  initials: "RH",
+  color: "#93134B",
+  photo: "roger.jpg",
+  title: "Conceptual Architect & Ecosystem Builder",
+  company: "UCLL Innovation Lab",
+  location: "Leuven, BE",
+  expertise: ["Ecosystem Design", "Talent Development", "Platform Strategy", "Impact Design"],
+  industries: ["EdTech", "Regional Development", "Innovation Ecosystems"],
+  sessions: 12,
+  rating: 5.0,
+};
+
+const SESSIONS_DATA = [
+  {
+    id: "ses1",
+    mentorId: 1,
+    mentorName: "Sarah Chen",
+    mentorInitials: "SC",
+    mentorColor: "#93134B",
+    date: "Tue, 18 March 2026",
+    time: "10:00 – 11:00",
+    topic: "Fundraising Strategy",
+    status: "upcoming",
+    notes: "Preparing deck + investor list",
+  },
+  {
+    id: "ses2",
+    mentorId: 2,
+    mentorName: "Nico Dubois",
+    mentorInitials: "ND",
+    mentorColor: "#758EBF",
+    date: "Thu, 6 March 2026",
+    time: "15:00 – 16:00",
+    topic: "MVP Prioritisation",
+    status: "completed",
+    notes: "Decided on 3 core features for v1",
+  },
+  {
+    id: "ses3",
+    mentorId: 5,
+    mentorName: "Priya Nair",
+    mentorInitials: "PN",
+    mentorColor: "#F25781",
+    date: "Wed, 25 Feb 2026",
+    time: "14:00 – 15:00",
+    topic: "Positioning & Messaging",
+    status: "completed",
+    notes: "Refined our ICP and value proposition",
+  },
+];
+
+const MENTOR_REQUESTS = [
+  { id: "r1", startup: "SkillBridge", founder: "Alex Martens", topic: "Go-to-Market Strategy", stage: "Validation", message: "We'd love your help structuring our first enterprise sales conversations.", date: "Mon, 17 March" },
+  { id: "r2", startup: "GreenRoute", founder: "Fatima El Hassan", topic: "Impact Measurement", stage: "MVP", message: "We need help defining KPIs that speak to both impact investors and B2B clients.", date: "Tue, 18 March" },
+  { id: "r3", startup: "DataForge", founder: "Koen Vermeersch", topic: "Ecosystem Design", stage: "Idea", message: "Looking for guidance on how to position our platform within the regional startup ecosystem.", date: "Wed, 19 March" },
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const state = {
+  view: "splash",
+  role: null,          // "startup" | "mentor"
+  selectedMentorId: null,
+  activeFilter: "All",
+  searchQuery: "",
+  sessionsTab: "upcoming",
+  booking: {
+    mentorId: null,
+    step: 0,           // 0=topic, 1=datetime, 2=confirm, 3=success
+    topic: null,
+    date: null,
+    time: null,
+  },
+  mySessions: [...SESSIONS_DATA],
+  mentorRequests: [...MENTOR_REQUESTS],
+  dismissedRequests: [],
+};
+
+/* ============================================================
+   ROUTER
+   ============================================================ */
+function navigate(view, params = {}) {
+  state._prevView = state.view; // track where we came from (iOS-safe back)
+  Object.assign(state, params);
+  state.view = view;
+  render();
+  window.scrollTo(0, 0);
+}
+
+/* ============================================================
+   MAIN RENDER
+   ============================================================ */
+function render() {
+  const app = document.getElementById("app");
+
+  if (state.view === "splash") {
+    app.innerHTML = renderSplash();
+    attachSplashListeners();
+    return;
+  }
+
+  const viewMap = {
+    dashboard: renderDashboard,
+    discover: renderDiscover,
+    mentor_profile: renderMentorProfile,
+    book: renderBooking,
+    sessions: renderSessions,
+    profile: renderProfile,
+    ai_match: renderAIMatch,
+  };
+
+  const contentFn = viewMap[state.view] || renderDashboard;
+
+  app.innerHTML = `
+    <div class="app-shell">
+      ${renderTopNav()}
+      <main class="main-content" id="main">
+        ${contentFn()}
+      </main>
+      ${renderBottomNav()}
+    </div>
+  `;
+
+  attachEventListeners();
+}
+
+/* ============================================================
+   TOP NAV
+   ============================================================ */
+function renderTopNav() {
+  const isStartup = state.role === "startup";
+  const badge = isStartup
+    ? `<span class="role-badge">Startup</span>`
+    : `<span class="role-badge mentor">Mentor</span>`;
+  const profile = isStartup ? MY_STARTUP : MY_MENTOR_PROFILE;
+  const avatarStyle = `background:${profile.color};`;
+  const avatarContent = profile.photo
+    ? `<img src="${profile.photo}" alt="${profile.name}" onerror="this.parentElement.innerHTML='${profile.initials}'">`
+    : profile.initials;
+  return `
+    <nav class="top-nav">
+      <div class="eu-logo" title="E³UDRES²">
+        <span class="eu-e">E<span class="eu-sup">3</span></span>
+        <span class="eu-udres">UDRES<span class="eu-sup2">2</span></span>
+      </div>
+      <div class="brand">mentor<span>.me</span></div>
+      ${badge}
+      <button class="avatar-btn" style="${avatarStyle}" onclick="navigate('profile')">${avatarContent}</button>
+    </nav>
+  `;
+}
+
+/* ============================================================
+   BOTTOM NAV
+   ============================================================ */
+function renderBottomNav() {
+  const items = state.role === "startup"
+    ? [
+        { icon: "��", label: "Home",     view: "dashboard" },
+        { icon: "��", label: "Discover", view: "discover" },
+        { icon: "��", label: "AI Match", view: "ai_match" },
+        { icon: "��", label: "Sessions", view: "sessions" },
+        { icon: "��", label: "Profile",  view: "profile" },
+      ]
+    : [
+        { icon: "��", label: "Home",     view: "dashboard" },
+        { icon: "��", label: "Requests", view: "sessions" },
+        { icon: "��", label: "Sessions", view: "sessions" },
+        { icon: "��", label: "Profile",  view: "profile" },
+      ];
+
+  return `
+    <nav class="bottom-nav">
+      ${items.map(item => `
+        <button class="nav-item ${state.view === item.view ? "active" : ""}" onclick="navigate('${item.view}')">
+          <span class="nav-icon">${item.icon}</span>
+          <span class="nav-label">${item.label}</span>
+        </button>
+      `).join("")}
+    </nav>
+  `;
+}
+
+/* ============================================================
+   SPLASH
+   ============================================================ */
+function renderSplash() {
+  return `
+    <div class="splash">
+      <div class="splash-logo">mentor<span>.me</span></div>
+      <p class="splash-tagline">The smart platform connecting<br>startups with the right mentors.</p>
+      <div class="splash-roles">
+        <button class="role-card startup" id="role-startup">
+          <span class="role-icon">��</span>
+          <div class="role-info">
+            <div class="role-title">I'm a Startup</div>
+            <div class="role-desc">Find mentors, book sessions, grow faster with the right guidance.</div>
+          </div>
+        </button>
+        <button class="role-card mentor" id="role-mentor">
+          <span class="role-icon">��</span>
+          <div class="role-info">
+            <div class="role-title">I'm a Mentor</div>
+            <div class="role-desc">Share your expertise, accept requests, and build your impact portfolio.</div>
+          </div>
+        </button>
+      </div>
+      <p class="splash-footer">
+        <span style="display:inline-flex;align-items:center;gap:5px;background:#010326;padding:4px 10px;border-radius:7px;margin-bottom:6px;">
+          <span style="font-size:12px;font-weight:800;color:#EBD3DF;">E<sup style="color:#F25781;font-size:8px;">3</sup></span>
+          <span style="font-size:10px;font-weight:700;color:#F2F2F2;letter-spacing:0.05em;">UDRES<sup style="color:#758EBF;font-size:8px;">2</sup></span>
+        </span><br>
+        UCLL Innovation Lab · Boost Impact Week 2026
+      </p>
+    </div>
+  `;
+}
+
+function attachSplashListeners() {
+  document.getElementById("role-startup")?.addEventListener("click", () => {
+    state.role = "startup";
+    navigate("dashboard");
+  });
+  document.getElementById("role-mentor")?.addEventListener("click", () => {
+    state.role = "mentor";
+    navigate("dashboard");
+  });
+}
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+function renderDashboard() {
+  if (state.role === "mentor") return renderMentorDashboard();
+
+  const upcomingSession = state.mySessions.find(s => s.status === "upcoming");
+  const completedCount = state.mySessions.filter(s => s.status === "completed").length;
+  const topMatches = MENTORS.slice(0, 3);
+
+  return `
+    <div class="dashboard-hello">
+      <div class="hello-line">Good morning ��</div>
+      <div class="hello-name">${MY_STARTUP.name}</div>
+      <div class="hello-sub">${MY_STARTUP.startupName} · ${MY_STARTUP.stage} Stage</div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card pink">
+        <div class="stat-value">${MENTORS.length}</div>
+        <div class="stat-label">Mentors available</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-value">${state.mySessions.length}</div>
+        <div class="stat-label">Sessions total</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-value">${completedCount}</div>
+        <div class="stat-label">Completed</div>
+      </div>
+    </div>
+
+    ${upcomingSession ? `
+    <div class="section-title">�� Next Session</div>
+    <div class="session-card" onclick="navigate('sessions')">
+      <div class="session-meta">⏰ ${upcomingSession.date} · ${upcomingSession.time}</div>
+      <div class="session-title">${upcomingSession.topic}</div>
+      <div class="session-with">with ${upcomingSession.mentorName}</div>
+      <span class="session-status status-upcoming">Upcoming</span>
+    </div>
+    ` : ""}
+
+    <div class="ai-banner" onclick="navigate('ai_match')">
+      <div class="ai-label">�� AI Matching Engine</div>
+      <div class="ai-title">3 new mentor matches <span class="ai-arrow">→</span></div>
+      <div class="ai-sub">Based on your challenge: go-to-market strategy</div>
+    </div>
+
+    <div class="section-title">⭐ Top Matches for You</div>
+    ${topMatches.map(m => mentorMatchCard(m)).join("")}
+
+    <div class="spacer"></div>
+  `;
+}
+
+function renderMentorDashboard() {
+  const activeRequests = MENTOR_REQUESTS.filter(r => !state.dismissedRequests.includes(r.id));
+  const upcomingSession = state.mySessions.find(s => s.status === "upcoming");
+
+  return `
+    <div class="dashboard-hello">
+      <div class="hello-line">Welcome back ��</div>
+      <div class="hello-name">${MY_MENTOR_PROFILE.name}</div>
+      <div class="hello-sub">${MY_MENTOR_PROFILE.title}</div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card blue">
+        <div class="stat-value">${activeRequests.length}</div>
+        <div class="stat-label">New requests</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-value">${MY_MENTOR_PROFILE.sessions}</div>
+        <div class="stat-label">Sessions given</div>
+      </div>
+      <div class="stat-card pink">
+        <div class="stat-value">${MY_MENTOR_PROFILE.rating}</div>
+        <div class="stat-label">Avg. rating</div>
+      </div>
+    </div>
+
+    ${upcomingSession ? `
+    <div class="section-title">�� Next Session</div>
+    <div class="session-card blue-border" onclick="navigate('sessions')">
+      <div class="session-meta">⏰ ${upcomingSession.date} · ${upcomingSession.time}</div>
+      <div class="session-title">${upcomingSession.topic}</div>
+      <div class="session-with">with ${upcomingSession.mentorName}</div>
+      <span class="session-status status-upcoming">Upcoming</span>
+    </div>
+    ` : ""}
+
+    <div class="section-title">�� Pending Requests <span class="badge-new">${activeRequests.length}</span></div>
+    ${activeRequests.map(r => requestCard(r)).join("")}
+
+    <div class="spacer"></div>
+  `;
+}
+
+function mentorMatchCard(mentor) {
+  return `
+    <div class="match-card" onclick="navigate('mentor_profile', {selectedMentorId: ${mentor.id}})">
+      <div class="mentor-avatar" style="background:${mentor.color}">${mentor.initials}</div>
+      <div class="match-info">
+        <div class="mentor-name">${mentor.name}</div>
+        <div class="mentor-title">${mentor.title}</div>
+        <div class="match-tags">
+          ${mentor.expertise.slice(0, 2).map((e, i) => `<span class="tag ${["pink","blue","green","amber","purple"][i % 5]}">${e}</span>`).join("")}
+        </div>
+      </div>
+      <div class="match-score-wrap">
+        <div class="match-score">${mentor.matchScore}%</div>
+        <div class="match-score-label">Match</div>
+        <div class="score-bar"><div class="score-fill" style="width:${mentor.matchScore}%"></div></div>
+      </div>
+    </div>
+  `;
+}
+
+function requestCard(req) {
+  return `
+    <div class="request-card" id="req-${req.id}">
+      <div class="req-from">�� ${req.startup} · ${req.stage} Stage</div>
+      <div class="req-title">${req.topic}</div>
+      <div class="req-meta">from ${req.founder} · ${req.date}</div>
+      <div class="req-meta" style="margin-top:6px;font-size:12px;color:#555;">"${req.message}"</div>
+      <div class="request-actions">
+        <button class="btn-accept" onclick="acceptRequest('${req.id}')">✓ Accept</button>
+        <button class="btn-decline" onclick="declineRequest('${req.id}')">✕ Decline</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   DISCOVER
+   ============================================================ */
+function renderDiscover() {
+  const filters = ["All", "Fundraising", "Product", "Marketing", "Tech", "Impact"];
+  const query = state.searchQuery.toLowerCase();
+  const activeFilter = state.activeFilter;
+
+  const filtered = MENTORS.filter(m => {
+    const matchSearch = !query ||
+      m.name.toLowerCase().includes(query) ||
+      m.expertise.some(e => e.toLowerCase().includes(query)) ||
+      m.industries.some(i => i.toLowerCase().includes(query));
+    const matchFilter = activeFilter === "All" ||
+      m.expertise.some(e => e.toLowerCase().includes(activeFilter.toLowerCase())) ||
+      m.industries.some(i => i.toLowerCase().includes(activeFilter.toLowerCase()));
+    return matchSearch && matchFilter;
+  });
+
+  return `
+    <div class="section-header">
+      <h2>Find a Mentor</h2>
+      <p>${MENTORS.length} mentors in your ecosystem</p>
+    </div>
+
+    <div class="search-bar">
+      <span class="search-icon">��</span>
+      <input id="search-input" type="text" placeholder="Search by name, skill, sector…" value="${state.searchQuery}"/>
+    </div>
+
+    <div class="filter-row" id="filter-row">
+      ${filters.map(f => `
+        <button class="filter-chip ${f === activeFilter ? "active" : ""}" data-filter="${f}">${f}</button>
+      `).join("")}
+    </div>
+
+    <div class="mentor-grid" id="mentor-grid">
+      ${filtered.length > 0
+        ? filtered.map(m => mentorGridCard(m)).join("")
+        : `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">��</div><h3>No mentors found</h3><p>Try a different search or filter.</p></div></div>`
+      }
+    </div>
+    <div class="spacer"></div>
+  `;
+}
+
+function mentorGridCard(mentor) {
+  return `
+    <div class="mentor-grid-card" onclick="navigate('mentor_profile', {selectedMentorId: ${mentor.id}})">
+      <div class="card-avatar" style="background:${mentor.color}">${mentor.initials}</div>
+      <div class="card-name">${mentor.name}</div>
+      <div class="card-role">${mentor.title.split(" & ")[0]}</div>
+      <div class="card-tags">
+        ${mentor.expertise.slice(0, 2).map((e, i) => `<span class="tag ${["pink","blue","green","amber","purple"][i % 5]}" style="font-size:10px;padding:2px 7px">${e}</span>`).join("")}
+      </div>
+      <div class="card-rating">⭐ ${mentor.rating} · ${mentor.sessions} sessions</div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   MENTOR PROFILE
+   ============================================================ */
+function renderMentorProfile() {
+  const mentor = MENTORS.find(m => m.id === state.selectedMentorId);
+  if (!mentor) return `<div class="empty-state"><h3>Mentor not found</h3></div>`;
+
+  const tagColors = ["pink", "blue", "green", "amber", "purple", "gray"];
+
+  return `
+    <div class="profile-hero">
+      <button class="back-btn" onclick="navigate(state._prevView || 'discover')">← Back</button>
+      <div class="profile-hero-inner">
+        <div class="profile-avatar-large" style="background:${mentor.color}">${mentor.initials}</div>
+        <div class="profile-hero-info">
+          <div class="profile-name">${mentor.name}</div>
+          <div class="profile-title">${mentor.title}</div>
+          <div class="profile-location">�� ${mentor.location} · ${mentor.company}</div>
+          <div class="profile-rating-row">
+            <span class="profile-rating">⭐ ${mentor.rating}</span>
+            <span class="profile-sessions-count">${mentor.sessions} sessions given</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <h3>About</h3>
+      <p class="profile-bio">${mentor.bio}</p>
+    </div>
+
+    <div class="profile-section">
+      <h3>Expertise</h3>
+      <div class="tags-wrap">
+        ${mentor.expertise.map((e, i) => `<span class="tag ${tagColors[i % tagColors.length]}">${e}</span>`).join("")}
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <h3>Industries</h3>
+      <div class="tags-wrap">
+        ${mentor.industries.map((ind, i) => `<span class="tag ${tagColors[(i + 2) % tagColors.length]}">${ind}</span>`).join("")}
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <h3>Languages</h3>
+      <div class="tags-wrap">
+        ${mentor.languages.map(l => `<span class="tag gray">�� ${l}</span>`).join("")}
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <h3>Availability</h3>
+      <div class="availability-grid">
+        ${mentor.availability.map(a => `
+          <div class="avail-slot">
+            <div class="avail-day">${a.day}</div>
+            <div class="avail-time">${a.time}</div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+
+    ${state.role === "startup" ? `
+    <div class="profile-section">
+      <h3>AI Match Score</h3>
+      <div style="background:#fff;border-radius:14px;padding:16px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+          <div style="font-size:32px;font-weight:800;color:#3DB742;">${mentor.matchScore}%</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Strong match for you</div>
+            <div style="font-size:12px;color:#888;">Based on your stage & challenge</div>
+          </div>
+        </div>
+        ${mentor.matchReasons.map(r => `<div style="font-size:12px;color:#444;padding:4px 0;border-bottom:1px solid #f0eef4;">✓ ${r}</div>`).join("")}
+      </div>
+    </div>
+    ` : ""}
+
+    <div class="book-cta">
+      <button class="btn-primary" onclick="startBooking(${mentor.id})">
+        �� Book a Session with ${mentor.name.split(" ")[0]}
+      </button>
+    </div>
+  `;
+}
+
+/* ============================================================
+   BOOKING FLOW
+   ============================================================ */
+function startBooking(mentorId) {
+  state.booking = { mentorId, step: 0, topic: null, date: null, time: null };
+  navigate("book");
+}
+
+function renderBooking() {
+  const mentor = MENTORS.find(m => m.id === state.booking.mentorId);
+  if (!mentor) return "";
+
+  const steps = ["Choose Topic", "Pick Date & Time", "Confirm"];
+  const { step } = state.booking;
+
+  if (step === 3) return renderBookingSuccess(mentor);
+
+  return `
+    <div style="background:#fff;padding:16px 20px 12px;border-bottom:1px solid #f0eef4;">
+      <button class="back-btn" onclick="navigate('mentor_profile', {selectedMentorId: ${mentor.id}})">← Back to Profile</button>
+      <div style="font-size:18px;font-weight:700;">Book a Session</div>
+      <div style="font-size:12px;color:#888;margin-top:2px;">with ${mentor.name}</div>
+    </div>
+
+    <div class="booking-progress">
+      ${steps.map((s, i) => `<div class="progress-step ${i < step ? "done" : i === step ? "active" : ""}"></div>`).join("")}
+    </div>
+    <div class="booking-step-label">Step ${step + 1} of ${steps.length}: <strong>${steps[step]}</strong></div>
+
+    <div class="booking-screen">
+      ${step === 0 ? renderTopicStep() : ""}
+      ${step === 1 ? renderDateTimeStep(mentor) : ""}
+      ${step === 2 ? renderConfirmStep(mentor) : ""}
+    </div>
+  `;
+}
+
+function renderTopicStep() {
+  const topics = [
+    { icon: "��", name: "Product Strategy" },
+    { icon: "��", name: "Fundraising" },
+    { icon: "��", name: "Go-to-Market" },
+    { icon: "⚙️", name: "Tech & Architecture" },
+    { icon: "��", name: "Positioning" },
+    { icon: "��", name: "Unit Economics" },
+  ];
+  return `
+    <div class="topic-grid">
+      ${topics.map(t => `
+        <div class="topic-card ${state.booking.topic === t.name ? "selected" : ""}" onclick="selectTopic('${t.name}')">
+          <div class="topic-icon">${t.icon}</div>
+          <div class="topic-name">${t.name}</div>
+        </div>
+      `).join("")}
+    </div>
+    ${state.booking.topic ? `
+      <div style="margin-top:20px;">
+        <button class="btn-primary" onclick="advanceBooking()">Continue →</button>
+      </div>
+    ` : ""}
+  `;
+}
+
+function renderDateTimeStep(mentor) {
+  const dates = [
+    { day: "MON", num: "17" }, { day: "TUE", num: "18" },
+    { day: "WED", num: "19" }, { day: "THU", num: "20" },
+    { day: "FRI", num: "21" }, { day: "SAT", num: "22" },
+    { day: "MON", num: "24" }, { day: "TUE", num: "25" },
+  ];
+  const times = ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00"];
+  const unavailable = ["11:00", "15:00"];
+
+  return `
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#888;">SELECT DATE — March 2026</div>
+      <div class="date-grid">
+        ${dates.map(d => `
+          <button class="date-btn ${state.booking.date === d.num ? "selected" : ""}" onclick="selectDate('${d.num}')">
+            <div class="date-day">${d.day}</div>
+            <div class="date-num">${d.num}</div>
+          </button>
+        `).join("")}
+      </div>
+
+      ${state.booking.date ? `
+        <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#888;">SELECT TIME</div>
+        <div class="time-grid">
+          ${times.map(t => `
+            <button class="time-btn ${unavailable.includes(t) ? "unavailable" : ""} ${state.booking.time === t ? "selected" : ""}"
+              onclick="${unavailable.includes(t) ? "" : `selectTime('${t}')`}">
+              ${t}
+            </button>
+          `).join("")}
+        </div>
+      ` : ""}
+
+      ${state.booking.date && state.booking.time ? `
+        <div style="margin-top:20px;">
+          <button class="btn-primary" onclick="advanceBooking()">Continue →</button>
+        </div>
+      ` : ""}
+    </div>
+  `;
+}
+
+function renderConfirmStep(mentor) {
+  const dateMap = { "17": "Mon 17 March", "18": "Tue 18 March", "19": "Wed 19 March", "20": "Thu 20 March", "21": "Fri 21 March", "22": "Sat 22 March", "24": "Mon 24 March", "25": "Tue 25 March" };
+  return `
+    <div>
+      <div class="confirm-card">
+        <div class="confirm-row">
+          <span class="label">Mentor</span>
+          <span class="value">${mentor.name}</span>
+        </div>
+        <div class="confirm-row">
+          <span class="label">Topic</span>
+          <span class="value">${state.booking.topic}</span>
+        </div>
+        <div class="confirm-row">
+          <span class="label">Date</span>
+          <span class="value">${dateMap[state.booking.date] || state.booking.date}</span>
+        </div>
+        <div class="confirm-row">
+          <span class="label">Time</span>
+          <span class="value">${state.booking.time} – ${addHour(state.booking.time)}</span>
+        </div>
+        <div class="confirm-row">
+          <span class="label">Duration</span>
+          <span class="value">60 minutes</span>
+        </div>
+        <div class="confirm-row">
+          <span class="label">Format</span>
+          <span class="value">�� Video Call</span>
+        </div>
+      </div>
+      <button class="btn-primary green" onclick="confirmBooking()">✓ Confirm Booking</button>
+      <button class="btn-secondary" onclick="state.booking.step=1; render();">← Change date/time</button>
+    </div>
+  `;
+}
+
+function renderBookingSuccess(mentor) {
+  return `
+    <div class="success-screen">
+      <div class="success-icon">��</div>
+      <h2>Session Booked!</h2>
+      <p>Your session with <strong>${mentor.name}</strong> on <strong>${state.booking.topic}</strong> is confirmed.<br>You'll receive a calendar invite shortly.</p>
+      <button class="btn-primary" onclick="navigate('sessions')" style="max-width:300px;margin:0 auto;display:block;">View My Sessions</button>
+      <button class="btn-secondary" onclick="navigate('dashboard')" style="max-width:300px;margin:10px auto 0;display:block;">Back to Dashboard</button>
+    </div>
+  `;
+}
+
+/* ============================================================
+   SESSIONS
+   ============================================================ */
+function renderSessions() {
+  const tab = state.sessionsTab;
+  const sessions = state.mySessions.filter(s =>
+    tab === "upcoming" ? s.status === "upcoming" : s.status !== "upcoming"
+  );
+
+  const borderMap = { "#93134B": "", "#758EBF": " blue-border", "#3DB742": " green-border", "#F25781": " green-border" };
+
+  return `
+    <div class="section-header">
+      <h2>My Sessions</h2>
+      <p>${state.mySessions.length} total sessions</p>
+    </div>
+
+    <div class="sessions-tabs">
+      <button class="tab-btn ${tab === "upcoming" ? "active" : ""}" onclick="state.sessionsTab='upcoming'; render();">Upcoming</button>
+      <button class="tab-btn ${tab === "past" ? "active" : ""}" onclick="state.sessionsTab='past'; render();">Past Sessions</button>
+    </div>
+
+    <div style="margin-top:16px;">
+      ${sessions.length > 0
+        ? sessions.map(s => `
+          <div class="session-card${borderMap[s.mentorColor] || ""}">
+            <div class="session-meta">⏰ ${s.date} · ${s.time}</div>
+            <div class="session-title">${s.topic}</div>
+            <div class="session-with">with ${s.mentorName}</div>
+            ${s.notes ? `<div style="font-size:11px;color:#888;margin-top:4px;font-style:italic;">"${s.notes}"</div>` : ""}
+            <span class="session-status ${s.status === "upcoming" ? "status-upcoming" : "status-completed"}">${s.status === "upcoming" ? "Upcoming" : "Completed"}</span>
+          </div>
+        `).join("")
+        : `<div class="empty-state"><div class="empty-icon">${tab === "upcoming" ? "��" : "��"}</div><h3>No ${tab} sessions</h3><p>${tab === "upcoming" ? "Book a session with a mentor to get started." : "Your completed sessions will appear here."}</p></div>`
+      }
+    </div>
+
+    ${tab === "upcoming" && state.role === "startup" ? `
+      <div style="padding:0 20px;">
+        <button class="btn-primary" onclick="navigate('discover')">+ Book a New Session</button>
+      </div>
+    ` : ""}
+
+    <div class="spacer"></div>
+  `;
+}
+
+/* ============================================================
+   PROFILE
+   ============================================================ */
+function renderProfile() {
+  const isStartup = state.role === "startup";
+  const profile = isStartup ? MY_STARTUP : MY_MENTOR_PROFILE;
+
+  return `
+    <div class="profile-page">
+      <div class="profile-page-hero">
+        <div class="profile-page-avatar" style="background:${profile.color}">
+        ${profile.photo ? `<img src="${profile.photo}" alt="${profile.name}" onerror="this.style.display='none'">` : profile.initials}
+      </div>
+        <div class="p-name">${profile.name}</div>
+        <div class="p-role">${isStartup ? profile.startupName + " · " + profile.stage : profile.title}</div>
+        <div style="margin-top:12px;">
+          ${isStartup
+            ? `<span class="tag pink">${profile.sector}</span>&nbsp;<span class="tag blue">${profile.stage} Stage</span>`
+            : profile.expertise.slice(0, 2).map((e, i) => `<span class="tag ${["pink","blue"][i]}">${e}</span>`).join("&nbsp;")
+          }
+        </div>
+      </div>
+
+      ${isStartup ? `
+        <div class="profile-info-card">
+          <h4>Startup Info</h4>
+          <div class="info-row"><span class="info-label">Startup</span><span class="info-value">${profile.startupName}</span></div>
+          <div class="info-row"><span class="info-label">Stage</span><span class="info-value">${profile.stage}</span></div>
+          <div class="info-row"><span class="info-label">Sector</span><span class="info-value">${profile.sector}</span></div>
+          <div class="info-row"><span class="info-label">Founded</span><span class="info-value">${profile.founded}</span></div>
+          <div class="info-row"><span class="info-label">Team</span><span class="info-value">${profile.team}</span></div>
+          <div class="info-row"><span class="info-label">Location</span><span class="info-value">${profile.location}</span></div>
+          <div class="info-row"><span class="info-label">Website</span><span class="info-value">${profile.website}</span></div>
+        </div>
+        <div class="profile-info-card">
+          <h4>Current Challenge</h4>
+          <p style="font-size:13px;color:#444;line-height:1.6;">${profile.challenge}</p>
+        </div>
+      ` : `
+        <div class="profile-info-card">
+          <h4>Mentor Stats</h4>
+          <div class="info-row"><span class="info-label">Sessions given</span><span class="info-value">${profile.sessions}</span></div>
+          <div class="info-row"><span class="info-label">Rating</span><span class="info-value">⭐ ${profile.rating}</span></div>
+          <div class="info-row"><span class="info-label">Organisation</span><span class="info-value">${profile.company}</span></div>
+          <div class="info-row"><span class="info-label">Location</span><span class="info-value">${profile.location}</span></div>
+        </div>
+        <div class="profile-info-card">
+          <h4>Expertise</h4>
+          <div class="tags-wrap" style="gap:6px;">
+            ${profile.expertise.map((e, i) => `<span class="tag ${["pink","blue","green","amber"][i % 4]}">${e}</span>`).join("")}
+          </div>
+        </div>
+      `}
+
+      <button class="btn-secondary" onclick="navigate('splash'); state.role=null;">
+        Switch Role
+      </button>
+    </div>
+  `;
+}
+
+/* ============================================================
+   AI MATCH
+   ============================================================ */
+function renderAIMatch() {
+  const sorted = [...MENTORS].sort((a, b) => b.matchScore - a.matchScore);
+
+  return `
+    <div class="ai-screen">
+      <div class="ai-header">
+        <div class="ai-h-label">�� AI Matching Engine</div>
+        <div class="ai-h-title">Your Top Mentor Matches</div>
+        <div class="ai-h-sub">Personalised for SkillBridge · ${MY_STARTUP.stage} Stage · ${MY_STARTUP.sector}</div>
+      </div>
+
+      <div style="font-size:12px;color:#888;margin-bottom:14px;padding:0 2px;">
+        Matching based on: your stage, sector, current challenge, and mentor availability.
+      </div>
+
+      ${sorted.map(mentor => `
+        <div class="ai-match-row" onclick="navigate('mentor_profile', {selectedMentorId: ${mentor.id}})">
+          <div class="mentor-avatar" style="background:${mentor.color};border-radius:12px;">${mentor.initials}</div>
+          <div class="ai-mentor-info">
+            <div class="ai-mentor-name">${mentor.name}</div>
+            <div class="ai-mentor-why">${mentor.matchReasons[0]}</div>
+          </div>
+          <div class="ai-score-circle">${mentor.matchScore}%</div>
+        </div>
+      `).join("")}
+
+      <div class="spacer"></div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   EVENT LISTENERS
+   ============================================================ */
+function attachEventListeners() {
+  // Search
+  const searchInput = document.getElementById("search-input");
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      state.searchQuery = e.target.value;
+      const grid = document.getElementById("mentor-grid");
+      if (grid) {
+        const query = state.searchQuery.toLowerCase();
+        const filtered = MENTORS.filter(m => {
+          const matchSearch = !query ||
+            m.name.toLowerCase().includes(query) ||
+            m.expertise.some(e => e.toLowerCase().includes(query)) ||
+            m.industries.some(i => i.toLowerCase().includes(query));
+          const matchFilter = state.activeFilter === "All" ||
+            m.expertise.some(e => e.toLowerCase().includes(state.activeFilter.toLowerCase()));
+          return matchSearch && matchFilter;
+        });
+        grid.innerHTML = filtered.length > 0
+          ? filtered.map(m => mentorGridCard(m)).join("")
+          : `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">��</div><h3>No mentors found</h3><p>Try a different search or filter.</p></div></div>`;
+      }
+    });
+  }
+
+  // Filter chips
+  document.querySelectorAll(".filter-chip[data-filter]").forEach(chip => {
+    chip.addEventListener("click", () => {
+      state.activeFilter = chip.dataset.filter;
+      navigate("discover");
+    });
+  });
+}
+
+/* ============================================================
+   BOOKING HELPERS
+   ============================================================ */
+function selectTopic(topic) {
+  state.booking.topic = topic;
+  render();
+}
+
+function selectDate(date) {
+  state.booking.date = date;
+  state.booking.time = null;
+  render();
+}
+
+function selectTime(time) {
+  state.booking.time = time;
+  render();
+}
+
+function advanceBooking() {
+  state.booking.step++;
+  render();
+}
+
+function confirmBooking() {
+  const mentor = MENTORS.find(m => m.id === state.booking.mentorId);
+  const dateMap = { "17": "Mon, 17 March 2026", "18": "Tue, 18 March 2026", "19": "Wed, 19 March 2026", "20": "Thu, 20 March 2026", "21": "Fri, 21 March 2026", "22": "Sat, 22 March 2026", "24": "Mon, 24 March 2026", "25": "Tue, 25 March 2026" };
+  const newSession = {
+    id: "ses" + Date.now(),
+    mentorId: mentor.id,
+    mentorName: mentor.name,
+    mentorInitials: mentor.initials,
+    mentorColor: mentor.color,
+    date: dateMap[state.booking.date] || state.booking.date,
+    time: `${state.booking.time} – ${addHour(state.booking.time)}`,
+    topic: state.booking.topic,
+    status: "upcoming",
+    notes: "",
+  };
+  state.mySessions.unshift(newSession);
+  state.booking.step = 3;
+  render();
+}
+
+function addHour(time) {
+  const [h, m] = time.split(":").map(Number);
+  return `${String(h + 1).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+}
+
+/* ============================================================
+   MENTOR REQUEST HELPERS
+   ============================================================ */
+function acceptRequest(id) {
+  const card = document.getElementById("req-" + id);
+  if (card) {
+    card.innerHTML = `<div style="text-align:center;padding:12px 0;font-size:13px;font-weight:600;color:#3DB742;">✓ Request accepted — session added to your calendar</div>`;
+    setTimeout(() => {
+      state.dismissedRequests.push(id);
+      render();
+    }, 1500);
+  }
+}
+
+function declineRequest(id) {
+  const card = document.getElementById("req-" + id);
+  if (card) {
+    card.innerHTML = `<div style="text-align:center;padding:12px 0;font-size:13px;color:#888;">Request declined.</div>`;
+    setTimeout(() => {
+      state.dismissedRequests.push(id);
+      render();
+    }, 1000);
+  }
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+render();
+</script>
+</body>
+</html>
