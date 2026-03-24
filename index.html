@@ -584,17 +584,17 @@ function renderTopNav() {
 function renderBottomNav() {
   const items = state.role === "startup"
     ? [
-        { icon: "��", label: "Home",     view: "dashboard" },
-        { icon: "��", label: "Discover", view: "discover" },
-        { icon: "��", label: "AI Match", view: "ai_match" },
-        { icon: "��", label: "Sessions", view: "sessions" },
-        { icon: "��", label: "Profile",  view: "profile" },
+        { icon: "🏠", label: "Home",     view: "dashboard" },
+        { icon: "🔍", label: "Discover", view: "discover" },
+        { icon: "✨", label: "AI Match", view: "ai_match" },
+        { icon: "📅", label: "Sessions", view: "sessions" },
+        { icon: "👤", label: "Profile",  view: "profile" },
       ]
     : [
-        { icon: "��", label: "Home",     view: "dashboard" },
-        { icon: "��", label: "Requests", view: "sessions" },
-        { icon: "��", label: "Sessions", view: "sessions" },
-        { icon: "��", label: "Profile",  view: "profile" },
+        { icon: "🏠", label: "Home",     view: "dashboard" },
+        { icon: "📬", label: "Requests", view: "sessions" },
+        { icon: "📅", label: "Sessions", view: "sessions" },
+        { icon: "👤", label: "Profile",  view: "profile" },
       ];
 
   return `
@@ -619,14 +619,14 @@ function renderSplash() {
       <p class="splash-tagline">The smart platform connecting<br>startups with the right mentors.</p>
       <div class="splash-roles">
         <button class="role-card startup" id="role-startup">
-          <span class="role-icon">��</span>
+          <span class="role-icon">🚀</span>
           <div class="role-info">
             <div class="role-title">I'm a Startup</div>
             <div class="role-desc">Find mentors, book sessions, grow faster with the right guidance.</div>
           </div>
         </button>
         <button class="role-card mentor" id="role-mentor">
-          <span class="role-icon">��</span>
+          <span class="role-icon">🎓</span>
           <div class="role-info">
             <div class="role-title">I'm a Mentor</div>
             <div class="role-desc">Share your expertise, accept requests, and build your impact portfolio.</div>
@@ -667,7 +667,7 @@ function renderDashboard() {
 
   return `
     <div class="dashboard-hello">
-      <div class="hello-line">Good morning ��</div>
+      <div class="hello-line">Good morning ☀️</div>
       <div class="hello-name">${MY_STARTUP.name}</div>
       <div class="hello-sub">${MY_STARTUP.startupName} · ${MY_STARTUP.stage} Stage</div>
     </div>
@@ -688,7 +688,7 @@ function renderDashboard() {
     </div>
 
     ${upcomingSession ? `
-    <div class="section-title">�� Next Session</div>
+    <div class="section-title">📅 Next Session</div>
     <div class="session-card" onclick="navigate('sessions')">
       <div class="session-meta">⏰ ${upcomingSession.date} · ${upcomingSession.time}</div>
       <div class="session-title">${upcomingSession.topic}</div>
@@ -698,7 +698,7 @@ function renderDashboard() {
     ` : ""}
 
     <div class="ai-banner" onclick="navigate('ai_match')">
-      <div class="ai-label">�� AI Matching Engine</div>
+      <div class="ai-label">✨ AI Matching Engine</div>
       <div class="ai-title">3 new mentor matches <span class="ai-arrow">→</span></div>
       <div class="ai-sub">Based on your challenge: go-to-market strategy</div>
     </div>
@@ -716,7 +716,7 @@ function renderMentorDashboard() {
 
   return `
     <div class="dashboard-hello">
-      <div class="hello-line">Welcome back ��</div>
+      <div class="hello-line">Welcome back 👋</div>
       <div class="hello-name">${MY_MENTOR_PROFILE.name}</div>
       <div class="hello-sub">${MY_MENTOR_PROFILE.title}</div>
     </div>
@@ -737,7 +737,7 @@ function renderMentorDashboard() {
     </div>
 
     ${upcomingSession ? `
-    <div class="section-title">�� Next Session</div>
+    <div class="section-title">📅 Next Session</div>
     <div class="session-card blue-border" onclick="navigate('sessions')">
       <div class="session-meta">⏰ ${upcomingSession.date} · ${upcomingSession.time}</div>
       <div class="session-title">${upcomingSession.topic}</div>
@@ -746,7 +746,7 @@ function renderMentorDashboard() {
     </div>
     ` : ""}
 
-    <div class="section-title">�� Pending Requests <span class="badge-new">${activeRequests.length}</span></div>
+    <div class="section-title">📬 Pending Requests <span class="badge-new">${activeRequests.length}</span></div>
     ${activeRequests.map(r => requestCard(r)).join("")}
 
     <div class="spacer"></div>
@@ -776,7 +776,7 @@ function mentorMatchCard(mentor) {
 function requestCard(req) {
   return `
     <div class="request-card" id="req-${req.id}">
-      <div class="req-from">�� ${req.startup} · ${req.stage} Stage</div>
+      <div class="req-from">🚀 ${req.startup} · ${req.stage} Stage</div>
       <div class="req-title">${req.topic}</div>
       <div class="req-meta">from ${req.founder} · ${req.date}</div>
       <div class="req-meta" style="margin-top:6px;font-size:12px;color:#555;">"${req.message}"</div>
@@ -814,7 +814,7 @@ function renderDiscover() {
     </div>
 
     <div class="search-bar">
-      <span class="search-icon">��</span>
+      <span class="search-icon">🔍</span>
       <input id="search-input" type="text" placeholder="Search by name, skill, sector…" value="${state.searchQuery}"/>
     </div>
 
@@ -827,7 +827,7 @@ function renderDiscover() {
     <div class="mentor-grid" id="mentor-grid">
       ${filtered.length > 0
         ? filtered.map(m => mentorGridCard(m)).join("")
-        : `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">��</div><h3>No mentors found</h3><p>Try a different search or filter.</p></div></div>`
+        : `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">🔍</div><h3>No mentors found</h3><p>Try a different search or filter.</p></div></div>`
       }
     </div>
     <div class="spacer"></div>
@@ -865,7 +865,7 @@ function renderMentorProfile() {
         <div class="profile-hero-info">
           <div class="profile-name">${mentor.name}</div>
           <div class="profile-title">${mentor.title}</div>
-          <div class="profile-location">�� ${mentor.location} · ${mentor.company}</div>
+          <div class="profile-location">📍 ${mentor.location} · ${mentor.company}</div>
           <div class="profile-rating-row">
             <span class="profile-rating">⭐ ${mentor.rating}</span>
             <span class="profile-sessions-count">${mentor.sessions} sessions given</span>
@@ -896,7 +896,7 @@ function renderMentorProfile() {
     <div class="profile-section">
       <h3>Languages</h3>
       <div class="tags-wrap">
-        ${mentor.languages.map(l => `<span class="tag gray">�� ${l}</span>`).join("")}
+        ${mentor.languages.map(l => `<span class="tag gray">🌐 ${l}</span>`).join("")}
       </div>
     </div>
 
@@ -930,7 +930,7 @@ function renderMentorProfile() {
 
     <div class="book-cta">
       <button class="btn-primary" onclick="startBooking(${mentor.id})">
-        �� Book a Session with ${mentor.name.split(" ")[0]}
+        📅 Book a Session with ${mentor.name.split(" ")[0]}
       </button>
     </div>
   `;
@@ -975,12 +975,12 @@ function renderBooking() {
 
 function renderTopicStep() {
   const topics = [
-    { icon: "��", name: "Product Strategy" },
-    { icon: "��", name: "Fundraising" },
-    { icon: "��", name: "Go-to-Market" },
+    { icon: "🎯", name: "Product Strategy" },
+    { icon: "💰", name: "Fundraising" },
+    { icon: "🚀", name: "Go-to-Market" },
     { icon: "⚙️", name: "Tech & Architecture" },
-    { icon: "��", name: "Positioning" },
-    { icon: "��", name: "Unit Economics" },
+    { icon: "📊", name: "Positioning" },
+    { icon: "📈", name: "Unit Economics" },
   ];
   return `
     <div class="topic-grid">
@@ -1069,7 +1069,7 @@ function renderConfirmStep(mentor) {
         </div>
         <div class="confirm-row">
           <span class="label">Format</span>
-          <span class="value">�� Video Call</span>
+          <span class="value">📹 Video Call</span>
         </div>
       </div>
       <button class="btn-primary green" onclick="confirmBooking()">✓ Confirm Booking</button>
@@ -1081,7 +1081,7 @@ function renderConfirmStep(mentor) {
 function renderBookingSuccess(mentor) {
   return `
     <div class="success-screen">
-      <div class="success-icon">��</div>
+      <div class="success-icon">🎉</div>
       <h2>Session Booked!</h2>
       <p>Your session with <strong>${mentor.name}</strong> on <strong>${state.booking.topic}</strong> is confirmed.<br>You'll receive a calendar invite shortly.</p>
       <button class="btn-primary" onclick="navigate('sessions')" style="max-width:300px;margin:0 auto;display:block;">View My Sessions</button>
@@ -1123,7 +1123,7 @@ function renderSessions() {
             <span class="session-status ${s.status === "upcoming" ? "status-upcoming" : "status-completed"}">${s.status === "upcoming" ? "Upcoming" : "Completed"}</span>
           </div>
         `).join("")
-        : `<div class="empty-state"><div class="empty-icon">${tab === "upcoming" ? "��" : "��"}</div><h3>No ${tab} sessions</h3><p>${tab === "upcoming" ? "Book a session with a mentor to get started." : "Your completed sessions will appear here."}</p></div>`
+        : `<div class="empty-state"><div class="empty-icon">${tab === "upcoming" ? "📅" : "📋"}</div><h3>No ${tab} sessions</h3><p>${tab === "upcoming" ? "Book a session with a mentor to get started." : "Your completed sessions will appear here."}</p></div>`
       }
     </div>
 
@@ -1207,7 +1207,7 @@ function renderAIMatch() {
   return `
     <div class="ai-screen">
       <div class="ai-header">
-        <div class="ai-h-label">�� AI Matching Engine</div>
+        <div class="ai-h-label">✨ AI Matching Engine</div>
         <div class="ai-h-title">Your Top Mentor Matches</div>
         <div class="ai-h-sub">Personalised for SkillBridge · ${MY_STARTUP.stage} Stage · ${MY_STARTUP.sector}</div>
       </div>
@@ -1255,7 +1255,7 @@ function attachEventListeners() {
         });
         grid.innerHTML = filtered.length > 0
           ? filtered.map(m => mentorGridCard(m)).join("")
-          : `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">��</div><h3>No mentors found</h3><p>Try a different search or filter.</p></div></div>`;
+          : `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">🔍</div><h3>No mentors found</h3><p>Try a different search or filter.</p></div></div>`;
       }
     });
   }
