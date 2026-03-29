@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Mentor.Me — Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <style>
     /* ===== RESET & BASE ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,10 +36,11 @@
     /* ===== BOTTOM NAV ===== */
     .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #fff; border-top: 1px solid #f0eef4; display: flex; padding: 8px 0 0; padding-bottom: max(12px, env(safe-area-inset-bottom)); z-index: 100; }
     .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0; cursor: pointer; border: none; background: none; }
-    .nav-item .nav-icon { font-size: 20px; line-height: 1; }
+    .nav-item .nav-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; color: #aaa; }
+    .nav-item .nav-icon svg { width: 22px; height: 22px; stroke-width: 1.8; }
     .nav-item .nav-label { font-size: 10px; font-weight: 600; color: #aaa; letter-spacing: 0.03em; }
     .nav-item.active .nav-label { color: #93134B; }
-    .nav-item.active .nav-icon { filter: none; }
+    .nav-item.active .nav-icon { color: #93134B; }
 
     /* ===== SPLASH SCREEN ===== */
     .splash { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 32px; background: linear-gradient(160deg, #F2F2F2 0%, #EBD3DF 60%, #DDE6F3 100%); }
@@ -50,7 +52,10 @@
     .role-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.12); }
     .role-card.startup:hover { border-color: #93134B; }
     .role-card.mentor:hover { border-color: #758EBF; }
-    .role-icon { font-size: 36px; }
+    .role-icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
+    .role-icon svg { width: 36px; height: 36px; stroke-width: 1.5; }
+    .role-card.startup .role-icon { color: #93134B; }
+    .role-card.mentor .role-icon { color: #758EBF; }
     .role-info .role-title { font-size: 17px; font-weight: 700; margin-bottom: 3px; }
     .role-card.startup .role-info .role-title { color: #93134B; }
     .role-card.mentor .role-info .role-title { color: #758EBF; }
@@ -126,7 +131,8 @@
     .search-bar { margin: 16px 20px 0; position: relative; }
     .search-bar input { width: 100%; padding: 12px 16px 12px 42px; border-radius: 12px; border: 1.5px solid #e8e4ef; font-size: 14px; background: #fff; outline: none; transition: border-color 0.2s; }
     .search-bar input:focus { border-color: #93134B; }
-    .search-bar .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 16px; }
+    .search-bar .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #aaa; display: flex; }
+    .search-bar .search-icon svg { width: 16px; height: 16px; stroke-width: 2; }
 
     .filter-row { display: flex; gap: 8px; padding: 12px 20px 0; overflow-x: auto; scrollbar-width: none; -webkit-scrollbar: none; }
     .filter-row::-webkit-scrollbar { display: none; }
@@ -184,7 +190,8 @@
     .topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .topic-card { background: #fff; border-radius: 14px; padding: 14px; border: 2px solid #e8e4ef; cursor: pointer; transition: all 0.15s; }
     .topic-card:hover, .topic-card.selected { border-color: #93134B; background: #EBD3DF; }
-    .topic-card .topic-icon { font-size: 24px; margin-bottom: 6px; }
+    .topic-card .topic-icon { margin-bottom: 6px; color: #93134B; display: flex; }
+    .topic-card .topic-icon svg { width: 24px; height: 24px; stroke-width: 1.8; }
     .topic-card .topic-name { font-size: 13px; font-weight: 600; color: #010326; }
 
     .date-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
@@ -226,7 +233,8 @@
 
     /* ===== SUCCESS / CONFIRM ===== */
     .success-screen { padding: 60px 32px; text-align: center; }
-    .success-icon { font-size: 72px; margin-bottom: 16px; }
+    .success-icon { margin-bottom: 16px; color: #3DB742; display: flex; justify-content: center; }
+    .success-icon svg { width: 72px; height: 72px; stroke-width: 1.2; }
     .success-screen h2 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
     .success-screen p { font-size: 14px; color: #666; margin-bottom: 32px; line-height: 1.5; }
 
@@ -255,7 +263,8 @@
 
     /* ===== EMPTY STATE ===== */
     .empty-state { text-align: center; padding: 48px 32px; }
-    .empty-state .empty-icon { font-size: 56px; margin-bottom: 12px; }
+    .empty-state .empty-icon { margin-bottom: 12px; color: #ccc; display: flex; justify-content: center; }
+    .empty-state .empty-icon svg { width: 56px; height: 56px; stroke-width: 1.2; }
     .empty-state h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
     .empty-state p { font-size: 13px; color: #888; line-height: 1.5; }
 
@@ -263,6 +272,63 @@
     .divider { height: 1px; background: #f0eef4; margin: 4px 20px; }
     .spacer { height: 20px; }
     .badge-new { display: inline-block; background: #93134B; color: #fff; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 999px; margin-left: 4px; vertical-align: middle; }
+
+    /* ===== NEO AI AGENT ===== */
+    .neo-fab { position: fixed; bottom: 90px; right: 16px; width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(135deg, #93134B, #F25781); color: #fff; border: none; cursor: pointer; box-shadow: 0 4px 20px rgba(147,19,75,0.38); z-index: 200; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: transform 0.2s, box-shadow 0.2s, background 0.2s; }
+    .neo-fab:hover { transform: scale(1.08); box-shadow: 0 8px 28px rgba(147,19,75,0.48); }
+    .neo-fab.open { background: #010326; box-shadow: 0 4px 20px rgba(1,3,38,0.3); }
+    .neo-fab .fab-icon { font-size: 22px; line-height: 1; }
+    .neo-fab .fab-label { font-size: 8px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; opacity: 0.9; }
+
+    .neo-backdrop { position: fixed; inset: 0; background: rgba(1,3,38,0.45); z-index: 198; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+    .neo-backdrop.visible { opacity: 1; pointer-events: all; }
+
+    .neo-panel { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(102%); width: 100%; max-width: 430px; height: 78vh; background: #fff; border-radius: 24px 24px 0 0; z-index: 199; transition: transform 0.35s cubic-bezier(0.32,0.72,0,1); display: flex; flex-direction: column; box-shadow: 0 -8px 40px rgba(1,3,38,0.15); }
+    .neo-panel.open { transform: translateX(-50%) translateY(0); }
+    .neo-panel-handle { width: 40px; height: 4px; background: #e8e4ef; border-radius: 999px; margin: 10px auto 0; flex-shrink: 0; }
+
+    .neo-header { padding: 12px 20px; border-bottom: 1px solid #f0eef4; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .neo-avatar-wrap { width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, #93134B, #F25781); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .neo-header-info .neo-name { font-size: 17px; font-weight: 800; color: #010326; letter-spacing: -0.01em; }
+    .neo-header-info .neo-subtitle { font-size: 11px; color: #3DB742; font-weight: 600; display: flex; align-items: center; gap: 5px; margin-top: 1px; }
+    .neo-dot { width: 6px; height: 6px; border-radius: 50%; background: #3DB742; display: inline-block; animation: neo-pulse 2s infinite; }
+    @keyframes neo-pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+    .neo-close-btn { margin-left: auto; background: #F2F2F2; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s; }
+    .neo-close-btn:hover { background: #EBD3DF; }
+
+    .neo-mesneos { flex: 1; overflow-y: auto; padding: 14px 16px 8px; -webkit-overflow-scrolling: touch; }
+    .neo-msg-wrap { margin-bottom: 12px; display: flex; flex-direction: column; }
+    .neo-msg-wrap.from-neo { align-items: flex-start; }
+    .neo-msg-wrap.from-user { align-items: flex-end; }
+    .neo-bubble { max-width: 85%; padding: 11px 14px; border-radius: 18px; font-size: 13px; line-height: 1.5; }
+    .from-neo .neo-bubble { background: #F2F2F2; color: #010326; border-bottom-left-radius: 4px; }
+    .from-user .neo-bubble { background: #93134B; color: #fff; border-bottom-right-radius: 4px; }
+    .neo-msg-time { font-size: 10px; color: #bbb; margin-top: 3px; font-weight: 500; padding: 0 2px; }
+
+    .neo-mentor-suggest { background: #fff; border: 1.5px solid #EBD3DF; border-radius: 14px; padding: 12px 14px; margin-top: 8px; cursor: pointer; transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s; max-width: 85%; }
+    .neo-mentor-suggest:hover { transform: translateY(-2px); border-color: #93134B; box-shadow: 0 4px 16px rgba(147,19,75,0.12); }
+    .sms-top { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .sms-avatar { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .sms-info .sms-name { font-size: 13px; font-weight: 700; color: #010326; }
+    .sms-info .sms-role { font-size: 11px; color: #888; }
+    .sms-reason { font-size: 12px; color: #93134B; font-weight: 600; margin-top: 4px; }
+    .sms-cta { font-size: 11px; color: #758EBF; font-weight: 600; margin-top: 5px; }
+
+    .neo-quick-wrap { padding: 8px 16px 4px; display: flex; flex-wrap: wrap; gap: 7px; flex-shrink: 0; }
+    .neo-qr { background: #F2F2F2; border: 1.5px solid #EBD3DF; border-radius: 999px; padding: 8px 14px; font-size: 12px; font-weight: 600; color: #010326; cursor: pointer; white-space: nowrap; transition: all 0.15s; font-family: 'Poppins', sans-serif; }
+    .neo-qr:hover, .neo-qr:active { background: #EBD3DF; border-color: #93134B; color: #93134B; }
+
+    .neo-input-area { display: flex; gap: 8px; padding: 10px 16px; padding-bottom: max(14px, env(safe-area-inset-bottom)); border-top: 1px solid #f0eef4; flex-shrink: 0; }
+    .neo-text-input { flex: 1; padding: 11px 14px; border-radius: 12px; border: 1.5px solid #e8e4ef; font-size: 13px; font-family: 'Poppins', sans-serif; outline: none; background: #F2F2F2; color: #010326; transition: border-color 0.2s, background 0.2s; }
+    .neo-text-input:focus { border-color: #93134B; background: #fff; }
+    .neo-text-input::placeholder { color: #aaa; }
+    .neo-send-btn { width: 42px; height: 42px; border-radius: 12px; background: #93134B; color: #fff; border: none; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: opacity 0.15s, transform 0.15s; font-family: 'Poppins', sans-serif; }
+    .neo-send-btn:hover { opacity: 0.85; transform: scale(1.05); }
+    .neo-typing { display: flex; gap: 4px; align-items: center; padding: 12px 14px; background: #F2F2F2; border-radius: 18px; border-bottom-left-radius: 4px; width: fit-content; }
+    .neo-typing span { width: 7px; height: 7px; border-radius: 50%; background: #93134B; opacity: 0.4; animation: neo-type 1.2s infinite; }
+    .neo-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .neo-typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes neo-type { 0%,60%,100%{opacity:0.4;transform:scale(1)} 30%{opacity:1;transform:scale(1.2)} }
   </style>
 </head>
 <body>
@@ -477,9 +543,9 @@ const SESSIONS_DATA = [
 ];
 
 const MENTOR_REQUESTS = [
-  { id: "r1", startup: "SkillBridge", founder: "Alex Martens", topic: "Go-to-Market Strategy", stage: "Validation", message: "We'd love your help structuring our first enterprise sales conversations.", date: "Mon, 17 March" },
-  { id: "r2", startup: "GreenRoute", founder: "Fatima El Hassan", topic: "Impact Measurement", stage: "MVP", message: "We need help defining KPIs that speak to both impact investors and B2B clients.", date: "Tue, 18 March" },
-  { id: "r3", startup: "DataForge", founder: "Koen Vermeersch", topic: "Ecosystem Design", stage: "Idea", message: "Looking for guidance on how to position our platform within the regional startup ecosystem.", date: "Wed, 19 March" },
+  { id: "r1", startup: "SkillBridge", founder: "Alex Martens", topic: "Go-to-Market Strategy", stage: "Validation", mesneo: "We'd love your help structuring our first enterprise sales conversations.", date: "Mon, 17 March" },
+  { id: "r2", startup: "GreenRoute", founder: "Fatima El Hassan", topic: "Impact Measurement", stage: "MVP", mesneo: "We need help defining KPIs that speak to both impact investors and B2B clients.", date: "Tue, 18 March" },
+  { id: "r3", startup: "DataForge", founder: "Koen Vermeersch", topic: "Ecosystem Design", stage: "Idea", mesneo: "Looking for guidance on how to position our platform within the regional startup ecosystem.", date: "Wed, 19 March" },
 ];
 
 /* ============================================================
@@ -502,7 +568,19 @@ const state = {
   mySessions: [...SESSIONS_DATA],
   mentorRequests: [...MENTOR_REQUESTS],
   dismissedRequests: [],
+  neo: {
+    open: false,
+    mesneos: [],
+    initialized: false,
+  },
 };
+
+/* ============================================================
+   ICON HELPER (Lucide)
+   ============================================================ */
+function icon(name, size = 20) {
+  return `<i data-lucide="${name}" style="width:${size}px;height:${size}px;display:inline-flex;"></i>`;
+}
 
 /* ============================================================
    ROUTER
@@ -523,7 +601,11 @@ function render() {
 
   if (state.view === "splash") {
     app.innerHTML = renderSplash();
+    // Remove neo overlay on splash
+    const existing = document.getElementById("neo-overlay");
+    if (existing) existing.remove();
     attachSplashListeners();
+    if (window.lucide) lucide.createIcons();
     return;
   }
 
@@ -550,6 +632,22 @@ function render() {
   `;
 
   attachEventListeners();
+
+  // Neo overlay — persists across all non-splash views
+  let neoEl = document.getElementById("neo-overlay");
+  if (!neoEl) {
+    neoEl = document.createElement("div");
+    neoEl.id = "neo-overlay";
+    document.body.appendChild(neoEl);
+  }
+  neoEl.innerHTML = renderNeoWidget();
+  attachNeoListeners();
+  // Scroll mesneos to bottom if panel is open
+  if (state.neo.open) {
+    const msgs = document.getElementById("neo-msgs");
+    if (msgs) msgs.scrollTop = msgs.scrollHeight;
+  }
+  if (window.lucide) lucide.createIcons();
 }
 
 /* ============================================================
@@ -584,24 +682,24 @@ function renderTopNav() {
 function renderBottomNav() {
   const items = state.role === "startup"
     ? [
-        { icon: "🏠", label: "Home",     view: "dashboard" },
-        { icon: "🔍", label: "Discover", view: "discover" },
-        { icon: "✨", label: "AI Match", view: "ai_match" },
-        { icon: "📅", label: "Sessions", view: "sessions" },
-        { icon: "👤", label: "Profile",  view: "profile" },
+        { icon: "house",      label: "Home",     view: "dashboard" },
+        { icon: "compass",    label: "Discover", view: "discover" },
+        { icon: "sparkles",   label: "Neo",      view: "ai_match" },
+        { icon: "calendar",   label: "Sessions", view: "sessions" },
+        { icon: "user",       label: "Profile",  view: "profile" },
       ]
     : [
-        { icon: "🏠", label: "Home",     view: "dashboard" },
-        { icon: "📬", label: "Requests", view: "sessions" },
-        { icon: "📅", label: "Sessions", view: "sessions" },
-        { icon: "👤", label: "Profile",  view: "profile" },
+        { icon: "house",      label: "Home",     view: "dashboard" },
+        { icon: "inbox",      label: "Requests", view: "sessions" },
+        { icon: "calendar",   label: "Sessions", view: "sessions" },
+        { icon: "user",       label: "Profile",  view: "profile" },
       ];
 
   return `
     <nav class="bottom-nav">
       ${items.map(item => `
         <button class="nav-item ${state.view === item.view ? "active" : ""}" onclick="navigate('${item.view}')">
-          <span class="nav-icon">${item.icon}</span>
+          <span class="nav-icon">${icon(item.icon, 22)}</span>
           <span class="nav-label">${item.label}</span>
         </button>
       `).join("")}
@@ -619,14 +717,14 @@ function renderSplash() {
       <p class="splash-tagline">The smart platform connecting<br>startups with the right mentors.</p>
       <div class="splash-roles">
         <button class="role-card startup" id="role-startup">
-          <span class="role-icon">🚀</span>
+          <span class="role-icon">${icon("rocket", 36)}</span>
           <div class="role-info">
             <div class="role-title">I'm a Startup</div>
             <div class="role-desc">Find mentors, book sessions, grow faster with the right guidance.</div>
           </div>
         </button>
         <button class="role-card mentor" id="role-mentor">
-          <span class="role-icon">🎓</span>
+          <span class="role-icon">${icon("award", 36)}</span>
           <div class="role-info">
             <div class="role-title">I'm a Mentor</div>
             <div class="role-desc">Share your expertise, accept requests, and build your impact portfolio.</div>
@@ -667,7 +765,7 @@ function renderDashboard() {
 
   return `
     <div class="dashboard-hello">
-      <div class="hello-line">Good morning ☀️</div>
+      <div class="hello-line">Good morning</div>
       <div class="hello-name">${MY_STARTUP.name}</div>
       <div class="hello-sub">${MY_STARTUP.startupName} · ${MY_STARTUP.stage} Stage</div>
     </div>
@@ -688,9 +786,9 @@ function renderDashboard() {
     </div>
 
     ${upcomingSession ? `
-    <div class="section-title">📅 Next Session</div>
+    <div class="section-title">Next Session</div>
     <div class="session-card" onclick="navigate('sessions')">
-      <div class="session-meta">⏰ ${upcomingSession.date} · ${upcomingSession.time}</div>
+      <div class="session-meta">${upcomingSession.date} · ${upcomingSession.time}</div>
       <div class="session-title">${upcomingSession.topic}</div>
       <div class="session-with">with ${upcomingSession.mentorName}</div>
       <span class="session-status status-upcoming">Upcoming</span>
@@ -698,12 +796,12 @@ function renderDashboard() {
     ` : ""}
 
     <div class="ai-banner" onclick="navigate('ai_match')">
-      <div class="ai-label">✨ AI Matching Engine</div>
+      <div class="ai-label">Neo — AI Mentor Agent</div>
       <div class="ai-title">3 new mentor matches <span class="ai-arrow">→</span></div>
       <div class="ai-sub">Based on your challenge: go-to-market strategy</div>
     </div>
 
-    <div class="section-title">⭐ Top Matches for You</div>
+    <div class="section-title">Top Matches for You</div>
     ${topMatches.map(m => mentorMatchCard(m)).join("")}
 
     <div class="spacer"></div>
@@ -716,7 +814,7 @@ function renderMentorDashboard() {
 
   return `
     <div class="dashboard-hello">
-      <div class="hello-line">Welcome back 👋</div>
+      <div class="hello-line">Welcome back</div>
       <div class="hello-name">${MY_MENTOR_PROFILE.name}</div>
       <div class="hello-sub">${MY_MENTOR_PROFILE.title}</div>
     </div>
@@ -737,16 +835,16 @@ function renderMentorDashboard() {
     </div>
 
     ${upcomingSession ? `
-    <div class="section-title">📅 Next Session</div>
+    <div class="section-title">Next Session</div>
     <div class="session-card blue-border" onclick="navigate('sessions')">
-      <div class="session-meta">⏰ ${upcomingSession.date} · ${upcomingSession.time}</div>
+      <div class="session-meta">${upcomingSession.date} · ${upcomingSession.time}</div>
       <div class="session-title">${upcomingSession.topic}</div>
       <div class="session-with">with ${upcomingSession.mentorName}</div>
       <span class="session-status status-upcoming">Upcoming</span>
     </div>
     ` : ""}
 
-    <div class="section-title">📬 Pending Requests <span class="badge-new">${activeRequests.length}</span></div>
+    <div class="section-title">Pending Requests <span class="badge-new">${activeRequests.length}</span></div>
     ${activeRequests.map(r => requestCard(r)).join("")}
 
     <div class="spacer"></div>
@@ -776,10 +874,10 @@ function mentorMatchCard(mentor) {
 function requestCard(req) {
   return `
     <div class="request-card" id="req-${req.id}">
-      <div class="req-from">🚀 ${req.startup} · ${req.stage} Stage</div>
+      <div class="req-from">${req.startup} · ${req.stage} Stage</div>
       <div class="req-title">${req.topic}</div>
       <div class="req-meta">from ${req.founder} · ${req.date}</div>
-      <div class="req-meta" style="margin-top:6px;font-size:12px;color:#555;">"${req.message}"</div>
+      <div class="req-meta" style="margin-top:6px;font-size:12px;color:#555;">"${req.mesneo}"</div>
       <div class="request-actions">
         <button class="btn-accept" onclick="acceptRequest('${req.id}')">✓ Accept</button>
         <button class="btn-decline" onclick="declineRequest('${req.id}')">✕ Decline</button>
@@ -814,7 +912,7 @@ function renderDiscover() {
     </div>
 
     <div class="search-bar">
-      <span class="search-icon">🔍</span>
+      <span class="search-icon">${icon("search", 16)}</span>
       <input id="search-input" type="text" placeholder="Search by name, skill, sector…" value="${state.searchQuery}"/>
     </div>
 
@@ -827,7 +925,7 @@ function renderDiscover() {
     <div class="mentor-grid" id="mentor-grid">
       ${filtered.length > 0
         ? filtered.map(m => mentorGridCard(m)).join("")
-        : `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">🔍</div><h3>No mentors found</h3><p>Try a different search or filter.</p></div></div>`
+        : `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">${icon("users", 56)}</div><h3>No mentors found</h3><p>Try a different search or filter.</p></div></div>`
       }
     </div>
     <div class="spacer"></div>
@@ -843,7 +941,7 @@ function mentorGridCard(mentor) {
       <div class="card-tags">
         ${mentor.expertise.slice(0, 2).map((e, i) => `<span class="tag ${["pink","blue","green","amber","purple"][i % 5]}" style="font-size:10px;padding:2px 7px">${e}</span>`).join("")}
       </div>
-      <div class="card-rating">⭐ ${mentor.rating} · ${mentor.sessions} sessions</div>
+      <div class="card-rating">★ ${mentor.rating} · ${mentor.sessions} sessions</div>
     </div>
   `;
 }
@@ -865,9 +963,9 @@ function renderMentorProfile() {
         <div class="profile-hero-info">
           <div class="profile-name">${mentor.name}</div>
           <div class="profile-title">${mentor.title}</div>
-          <div class="profile-location">📍 ${mentor.location} · ${mentor.company}</div>
+          <div class="profile-location">${mentor.location} · ${mentor.company}</div>
           <div class="profile-rating-row">
-            <span class="profile-rating">⭐ ${mentor.rating}</span>
+            <span class="profile-rating">★ ${mentor.rating}</span>
             <span class="profile-sessions-count">${mentor.sessions} sessions given</span>
           </div>
         </div>
@@ -896,7 +994,7 @@ function renderMentorProfile() {
     <div class="profile-section">
       <h3>Languages</h3>
       <div class="tags-wrap">
-        ${mentor.languages.map(l => `<span class="tag gray">🌐 ${l}</span>`).join("")}
+        ${mentor.languages.map(l => `<span class="tag gray">${l}</span>`).join("")}
       </div>
     </div>
 
@@ -930,7 +1028,7 @@ function renderMentorProfile() {
 
     <div class="book-cta">
       <button class="btn-primary" onclick="startBooking(${mentor.id})">
-        📅 Book a Session with ${mentor.name.split(" ")[0]}
+        Book a Session with ${mentor.name.split(" ")[0]}
       </button>
     </div>
   `;
@@ -975,12 +1073,12 @@ function renderBooking() {
 
 function renderTopicStep() {
   const topics = [
-    { icon: "🎯", name: "Product Strategy" },
-    { icon: "💰", name: "Fundraising" },
-    { icon: "🚀", name: "Go-to-Market" },
-    { icon: "⚙️", name: "Tech & Architecture" },
-    { icon: "📊", name: "Positioning" },
-    { icon: "📈", name: "Unit Economics" },
+    { icon: icon("target",      24), name: "Product Strategy" },
+    { icon: icon("dollar-sign", 24), name: "Fundraising" },
+    { icon: icon("globe",       24), name: "Go-to-Market" },
+    { icon: icon("cpu",         24), name: "Tech & Architecture" },
+    { icon: icon("bar-chart-2", 24), name: "Positioning" },
+    { icon: icon("trending-up", 24), name: "Unit Economics" },
   ];
   return `
     <div class="topic-grid">
@@ -1069,7 +1167,7 @@ function renderConfirmStep(mentor) {
         </div>
         <div class="confirm-row">
           <span class="label">Format</span>
-          <span class="value">📹 Video Call</span>
+          <span class="value">Video Call</span>
         </div>
       </div>
       <button class="btn-primary green" onclick="confirmBooking()">✓ Confirm Booking</button>
@@ -1081,7 +1179,7 @@ function renderConfirmStep(mentor) {
 function renderBookingSuccess(mentor) {
   return `
     <div class="success-screen">
-      <div class="success-icon">🎉</div>
+      <div class="success-icon">${icon("check-circle", 72)}</div>
       <h2>Session Booked!</h2>
       <p>Your session with <strong>${mentor.name}</strong> on <strong>${state.booking.topic}</strong> is confirmed.<br>You'll receive a calendar invite shortly.</p>
       <button class="btn-primary" onclick="navigate('sessions')" style="max-width:300px;margin:0 auto;display:block;">View My Sessions</button>
@@ -1116,14 +1214,14 @@ function renderSessions() {
       ${sessions.length > 0
         ? sessions.map(s => `
           <div class="session-card${borderMap[s.mentorColor] || ""}">
-            <div class="session-meta">⏰ ${s.date} · ${s.time}</div>
+            <div class="session-meta">${s.date} · ${s.time}</div>
             <div class="session-title">${s.topic}</div>
             <div class="session-with">with ${s.mentorName}</div>
             ${s.notes ? `<div style="font-size:11px;color:#888;margin-top:4px;font-style:italic;">"${s.notes}"</div>` : ""}
             <span class="session-status ${s.status === "upcoming" ? "status-upcoming" : "status-completed"}">${s.status === "upcoming" ? "Upcoming" : "Completed"}</span>
           </div>
         `).join("")
-        : `<div class="empty-state"><div class="empty-icon">${tab === "upcoming" ? "📅" : "📋"}</div><h3>No ${tab} sessions</h3><p>${tab === "upcoming" ? "Book a session with a mentor to get started." : "Your completed sessions will appear here."}</p></div>`
+        : `<div class="empty-state"><div class="empty-icon">${tab === "upcoming" ? icon("calendar", 56) : icon("check-circle", 56)}</div><h3>No ${tab} sessions</h3><p>${tab === "upcoming" ? "Book a session with a mentor to get started." : "Your completed sessions will appear here."}</p></div>`
       }
     </div>
 
@@ -1179,7 +1277,7 @@ function renderProfile() {
         <div class="profile-info-card">
           <h4>Mentor Stats</h4>
           <div class="info-row"><span class="info-label">Sessions given</span><span class="info-value">${profile.sessions}</span></div>
-          <div class="info-row"><span class="info-label">Rating</span><span class="info-value">⭐ ${profile.rating}</span></div>
+          <div class="info-row"><span class="info-label">Rating</span><span class="info-value">★ ${profile.rating}</span></div>
           <div class="info-row"><span class="info-label">Organisation</span><span class="info-value">${profile.company}</span></div>
           <div class="info-row"><span class="info-label">Location</span><span class="info-value">${profile.location}</span></div>
         </div>
@@ -1207,7 +1305,7 @@ function renderAIMatch() {
   return `
     <div class="ai-screen">
       <div class="ai-header">
-        <div class="ai-h-label">✨ AI Matching Engine</div>
+        <div class="ai-h-label">Neo — AI Mentor Agent</div>
         <div class="ai-h-title">Your Top Mentor Matches</div>
         <div class="ai-h-sub">Personalised for SkillBridge · ${MY_STARTUP.stage} Stage · ${MY_STARTUP.sector}</div>
       </div>
@@ -1255,7 +1353,8 @@ function attachEventListeners() {
         });
         grid.innerHTML = filtered.length > 0
           ? filtered.map(m => mentorGridCard(m)).join("")
-          : `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">🔍</div><h3>No mentors found</h3><p>Try a different search or filter.</p></div></div>`;
+          : `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">${icon("users", 56)}</div><h3>No mentors found</h3><p>Try a different search or filter.</p></div></div>`;
+        if (window.lucide) lucide.createIcons();
       }
     });
   }
@@ -1341,6 +1440,227 @@ function declineRequest(id) {
       render();
     }, 1000);
   }
+}
+
+/* ============================================================
+   NEO AI AGENT — Conversation Engine
+   ============================================================ */
+
+const NEO_QUICK_REPLIES = [
+  { label: "Find me a mentor",  text: "find me a mentor" },
+  { label: "Fundraising help",  text: "fundraising" },
+  { label: "My top matches ✦",  text: "show my top matches" },
+  { label: "Prep a session",    text: "prep for my next session" },
+];
+
+function toggleNeo() {
+  state.neo.open = !state.neo.open;
+  if (state.neo.open && !state.neo.initialized) {
+    state.neo.initialized = true;
+    setTimeout(() => {
+      addNeoMsg("neo", "I'm **Neo** — I know the system.\n\nTell me what you're working on and I'll find exactly the right mentor. No guessing, no generic lists.");
+      refreshNeoPanel();
+    }, 350);
+  }
+  refreshNeoFAB();
+  refreshNeoPanel();
+}
+
+function refreshNeoFAB() {
+  const fab      = document.getElementById("neo-fab");
+  const backdrop = document.getElementById("neo-backdrop");
+  const panel    = document.getElementById("neo-panel");
+  if (!fab) return;
+  fab.classList.toggle("open", state.neo.open);
+  backdrop.classList.toggle("visible", state.neo.open);
+  panel.classList.toggle("open", state.neo.open);
+  fab.querySelector(".fab-icon").textContent = state.neo.open ? "✕" : "✦";
+}
+
+function refreshNeoPanel() {
+  const msgs = document.getElementById("neo-msgs");
+  if (!msgs) return;
+  msgs.innerHTML = buildNeoMsgsHTML();
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addNeoMsg(from, text, card = null) {
+  const now = new Date();
+  const time = now.getHours() + ":" + String(now.getMinutes()).padStart(2, "0");
+  state.neo.mesneos.push({ from, text, card, time });
+}
+
+function sendNeoMesneo(text) {
+  if (!text.trim()) return;
+  addNeoMsg("user", text);
+  refreshNeoPanel();
+  // Show typing indicator briefly
+  const msgs = document.getElementById("neo-msgs");
+  if (msgs) {
+    msgs.innerHTML += `<div class="neo-msg-wrap from-neo" id="neo-typing"><div class="neo-typing"><span></span><span></span><span></span></div></div>`;
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+  setTimeout(() => {
+    const reply = neoBotReply(text.toLowerCase());
+    addNeoMsg("neo", reply.text, reply.card || null);
+    refreshNeoPanel();
+  }, 900);
+}
+
+function handleNeoQR(text) {
+  sendNeoMesneo(text);
+}
+
+function neoBotReply(input) {
+  // Fundraising / investors
+  if (/fundrais|investor|pitch|raise|capital|seed|series|vc|angel/.test(input)) {
+    return {
+      text: "For fundraising, **Sarah Chen** is your person. 2 exits, active angel investor, deep European VC network. She knows what investors actually want to hear — and what kills a deal.",
+      card: MENTORS.find(m => m.id === 1),
+    };
+  }
+  // Product / UX / MVP
+  if (/product|ux|design|user research|mvp|feature|roadmap|prioriti/.test(input)) {
+    return {
+      text: "**Nico Dubois** (ex-Spotify) is your go-to for product thinking. Exceptional at helping founders cut scope ruthlessly and ship what actually matters to users.",
+      card: MENTORS.find(m => m.id === 2),
+    };
+  }
+  // Marketing / Growth / Positioning
+  if (/market|growth|brand|content|acqui|position|story|mesneo|customer|gtm|go.to.market/.test(input)) {
+    return {
+      text: "**Priya Nair** has taken 40+ startups from 0 to their first 1000 users. Her edge is positioning — making your message land with the people who need to hear it most.",
+      card: MENTORS.find(m => m.id === 5),
+    };
+  }
+  // Tech / Engineering / AI / CTO
+  if (/tech|code|engineer|architect|ai|ml|machine learn|cto|stack|backend|infra|build/.test(input)) {
+    return {
+      text: "**Lars Henriksen** is who you want for tech decisions — Philips background, CTO at 2 startups, deep AI/ML experience. He saves founders from architecture mistakes that cost them later.",
+      card: MENTORS.find(m => m.id === 4),
+    };
+  }
+  // Impact / Rural / Social / Sustainability
+  if (/impact|rural|social|sustain|grant|mission|community|region|ecosystem/.test(input)) {
+    return {
+      text: "**Amara Diallo** built RuralBridge from scratch. She gets mission-driven entrepreneurship — especially how to create real regional impact with limited resources and a big vision.",
+      card: MENTORS.find(m => m.id === 3),
+    };
+  }
+  // Finance / Unit economics / Numbers
+  if (/financ|unit econ|pric|revenue|model|cfo|numbers|investor ready|burn|runway/.test(input)) {
+    return {
+      text: "**Jonas Weiss** makes financial modelling and unit economics actually understandable for founders. Essential prep before any serious investor conversation.",
+      card: MENTORS.find(m => m.id === 6),
+    };
+  }
+  // Top matches / All mentors
+  if (/match|top|best|all mentor|who|recommend|suggest|list|show/.test(input)) {
+    return {
+      text: "✦ Based on your stage (**Validation**) and challenge (**go-to-market**), your top 3 are:\n\n**94%** Sarah Chen — Fundraising & GTM\n**88%** Nico Dubois — Product Strategy\n**85%** Priya Nair — Growth & Positioning\n\nWant me to go deeper on any of them?",
+      card: null,
+    };
+  }
+  // Session prep
+  if (/prep|session|ready|next session|question|before|meeting|what to bring/.test(input)) {
+    return {
+      text: "Smart move. Three things to do before any mentor session:\n\n**1.** Write your biggest blocker in one clear sentence\n**2.** Bring 2–3 specific questions — not vague ones\n**3.** Have a concrete ask: what decision do you need help making?\n\nWhat's the topic of your next session? I'll tailor this more.",
+      card: null,
+    };
+  }
+  // Greetings
+  if (/^(hello|hi|hey|sup|yo|start|what can|help)/.test(input.trim())) {
+    return {
+      text: "I'm here.\n\n• Right mentor for your challenge\n• Your top AI-matched mentors\n• Session prep that actually works\n\nWhat are you working on?",
+      card: null,
+    };
+  }
+  // Fallback
+  return {
+    text: "Got it — tell me a bit more. The more specific you are about the challenge, the sharper my match will be. What's the decision or problem you're working through?",
+    card: null,
+  };
+}
+
+function buildNeoMsgsHTML() {
+  if (!state.neo.mesneos.length) return "";
+  return state.neo.mesneos.map(msg => {
+    const html = msg.text
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\n/g, "<br>");
+    let cardHTML = "";
+    if (msg.card) {
+      const m = msg.card;
+      cardHTML = `
+        <div class="neo-mentor-suggest" onclick="openMentorFromNeo(${m.id})">
+          <div class="sms-top">
+            <div class="sms-avatar" style="background:${m.color}">${m.initials}</div>
+            <div class="sms-info">
+              <div class="sms-name">${m.name}</div>
+              <div class="sms-role">${m.title.split(" & ")[0]}</div>
+            </div>
+          </div>
+          <div class="sms-reason">✓ ${m.matchReasons[0]}</div>
+          <div class="sms-cta">Tap to view profile &amp; book a session →</div>
+        </div>`;
+    }
+    return `
+      <div class="neo-msg-wrap from-${msg.from}">
+        <div class="neo-bubble">${html}</div>
+        ${cardHTML}
+        <div class="neo-msg-time">${msg.time}</div>
+      </div>`;
+  }).join("");
+}
+
+function renderNeoWidget() {
+  const open = state.neo.open;
+  const qrHTML = NEO_QUICK_REPLIES.map(q =>
+    `<button class="neo-qr" onclick="handleNeoQR('${q.text}')">${q.label}</button>`
+  ).join("");
+  return `
+    <div id="neo-backdrop" class="neo-backdrop ${open ? "visible" : ""}" onclick="toggleNeo()"></div>
+    <button id="neo-fab" class="neo-fab ${open ? "open" : ""}" onclick="toggleNeo()">
+      <span class="fab-icon">${open ? "✕" : "✦"}</span>
+      <span class="fab-label">Neo</span>
+    </button>
+    <div id="neo-panel" class="neo-panel ${open ? "open" : ""}">
+      <div class="neo-panel-handle"></div>
+      <div class="neo-header">
+        <div class="neo-avatar-wrap">✦</div>
+        <div class="neo-header-info">
+          <div class="neo-name">Neo</div>
+          <div class="neo-subtitle"><span class="neo-dot"></span> AI Mentor Agent · Online</div>
+        </div>
+        <button class="neo-close-btn" onclick="toggleNeo()">✕</button>
+      </div>
+      <div class="neo-mesneos" id="neo-msgs">${buildNeoMsgsHTML()}</div>
+      <div class="neo-quick-wrap">${qrHTML}</div>
+      <div class="neo-input-area">
+        <input class="neo-text-input" id="neo-input" type="text" placeholder="Ask Neo anything…"/>
+        <button class="neo-send-btn" id="neo-send">↑</button>
+      </div>
+    </div>`;
+}
+
+function openMentorFromNeo(mentorId) {
+  state.neo.open = false;
+  navigate("mentor_profile", { selectedMentorId: mentorId });
+}
+
+function attachNeoListeners() {
+  const input   = document.getElementById("neo-input");
+  const sendBtn = document.getElementById("neo-send");
+  if (input && sendBtn) {
+    const doSend = () => {
+      const val = input.value.trim();
+      if (val) { sendNeoMesneo(val); input.value = ""; }
+    };
+    sendBtn.addEventListener("click", doSend);
+    input.addEventListener("keydown", e => { if (e.key === "Enter") doSend(); });
+  }
+  const msgs = document.getElementById("neo-msgs");
+  if (msgs) msgs.scrollTop = msgs.scrollHeight;
 }
 
 /* ============================================================
