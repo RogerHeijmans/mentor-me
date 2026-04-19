@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Mentor.Me — Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <style>
     /* ===== RESET & BASE ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,11 +35,10 @@
     /* ===== BOTTOM NAV ===== */
     .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #fff; border-top: 1px solid #f0eef4; display: flex; padding: 8px 0 0; padding-bottom: max(12px, env(safe-area-inset-bottom)); z-index: 100; }
     .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0; cursor: pointer; border: none; background: none; }
-    .nav-item .nav-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; color: #aaa; }
-    .nav-item .nav-icon svg { width: 22px; height: 22px; stroke-width: 1.8; }
+    .nav-item .nav-icon { font-size: 20px; line-height: 1; }
     .nav-item .nav-label { font-size: 10px; font-weight: 600; color: #aaa; letter-spacing: 0.03em; }
     .nav-item.active .nav-label { color: #93134B; }
-    .nav-item.active .nav-icon { color: #93134B; }
+    .nav-item.active .nav-icon { filter: none; }
 
     /* ===== SPLASH SCREEN ===== */
     .splash { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 32px; background: linear-gradient(160deg, #F2F2F2 0%, #EBD3DF 60%, #DDE6F3 100%); }
@@ -52,10 +50,9 @@
     .role-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.12); }
     .role-card.startup:hover { border-color: #93134B; }
     .role-card.mentor:hover { border-color: #758EBF; }
-    .role-icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
-    .role-icon svg { width: 36px; height: 36px; stroke-width: 1.5; }
-    .role-card.startup .role-icon { color: #93134B; }
-    .role-card.mentor .role-icon { color: #758EBF; }
+    .role-card.graduate:hover { border-color: #3DB742; }
+    .role-card.graduate .role-info .role-title { color: #3DB742; }
+    .role-icon { font-size: 36px; }
     .role-info .role-title { font-size: 17px; font-weight: 700; margin-bottom: 3px; }
     .role-card.startup .role-info .role-title { color: #93134B; }
     .role-card.mentor .role-info .role-title { color: #758EBF; }
@@ -131,8 +128,7 @@
     .search-bar { margin: 16px 20px 0; position: relative; }
     .search-bar input { width: 100%; padding: 12px 16px 12px 42px; border-radius: 12px; border: 1.5px solid #e8e4ef; font-size: 14px; background: #fff; outline: none; transition: border-color 0.2s; }
     .search-bar input:focus { border-color: #93134B; }
-    .search-bar .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #aaa; display: flex; }
-    .search-bar .search-icon svg { width: 16px; height: 16px; stroke-width: 2; }
+    .search-bar .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 16px; }
 
     .filter-row { display: flex; gap: 8px; padding: 12px 20px 0; overflow-x: auto; scrollbar-width: none; -webkit-scrollbar: none; }
     .filter-row::-webkit-scrollbar { display: none; }
@@ -190,8 +186,7 @@
     .topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .topic-card { background: #fff; border-radius: 14px; padding: 14px; border: 2px solid #e8e4ef; cursor: pointer; transition: all 0.15s; }
     .topic-card:hover, .topic-card.selected { border-color: #93134B; background: #EBD3DF; }
-    .topic-card .topic-icon { margin-bottom: 6px; color: #93134B; display: flex; }
-    .topic-card .topic-icon svg { width: 24px; height: 24px; stroke-width: 1.8; }
+    .topic-card .topic-icon { font-size: 24px; margin-bottom: 6px; }
     .topic-card .topic-name { font-size: 13px; font-weight: 600; color: #010326; }
 
     .date-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
@@ -233,8 +228,7 @@
 
     /* ===== SUCCESS / CONFIRM ===== */
     .success-screen { padding: 60px 32px; text-align: center; }
-    .success-icon { margin-bottom: 16px; color: #3DB742; display: flex; justify-content: center; }
-    .success-icon svg { width: 72px; height: 72px; stroke-width: 1.2; }
+    .success-icon { font-size: 72px; margin-bottom: 16px; }
     .success-screen h2 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
     .success-screen p { font-size: 14px; color: #666; margin-bottom: 32px; line-height: 1.5; }
 
@@ -263,8 +257,7 @@
 
     /* ===== EMPTY STATE ===== */
     .empty-state { text-align: center; padding: 48px 32px; }
-    .empty-state .empty-icon { margin-bottom: 12px; color: #ccc; display: flex; justify-content: center; }
-    .empty-state .empty-icon svg { width: 56px; height: 56px; stroke-width: 1.2; }
+    .empty-state .empty-icon { font-size: 56px; margin-bottom: 12px; }
     .empty-state h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
     .empty-state p { font-size: 13px; color: #888; line-height: 1.5; }
 
@@ -272,6 +265,60 @@
     .divider { height: 1px; background: #f0eef4; margin: 4px 20px; }
     .spacer { height: 20px; }
     .badge-new { display: inline-block; background: #93134B; color: #fff; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 999px; margin-left: 4px; vertical-align: middle; }
+
+    /* ===== CAREER SPRINTS ===== */
+    .sprint-funnel { background: #fff; border-radius: 16px; margin: 0 20px 16px; padding: 16px 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .funnel-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #888; margin-bottom: 12px; }
+    .funnel-steps { display: flex; align-items: center; gap: 4px; }
+    .funnel-step { flex: 1; text-align: center; padding: 8px 4px; border-radius: 10px; font-size: 10px; font-weight: 700; }
+    .funnel-step.done { background: #D5EED6; color: #3DB742; }
+    .funnel-step.active { background: #93134B; color: #fff; }
+    .funnel-step.next { background: #F2F2F2; color: #aaa; }
+    .funnel-step .fs-icon { font-size: 16px; display: block; margin-bottom: 3px; }
+    .funnel-arrow { color: #ccc; font-size: 14px; flex-shrink: 0; }
+    .sprint-card { background: #fff; border-radius: 16px; margin: 0 20px 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; overflow: hidden; }
+    .sprint-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.1); }
+    .sprint-card-inner { padding: 16px 18px; }
+    .sprint-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+    .sprint-icon-wrap { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .sprint-card-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .sprint-duration { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; }
+    .sprint-status { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+    .sprint-status.open { background: #D5EED6; color: #3DB742; }
+    .sprint-status.almost { background: #FEF4CC; color: #C8970A; }
+    .sprint-status.full { background: #f0eef4; color: #888; }
+    .sprint-title { font-size: 17px; font-weight: 800; color: #010326; margin-bottom: 2px; }
+    .sprint-focus-label { font-size: 12px; color: #888; margin-bottom: 10px; }
+    .sprint-outcome-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+    .sprint-outcome-row .so-value { font-size: 12px; font-weight: 600; color: #010326; }
+    .sprint-mentors-row { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+    .sprint-mentor-mini { width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; }
+    .sprint-mentors-label { font-size: 11px; color: #888; }
+    .sprint-enroll-bar { display: flex; align-items: center; gap: 8px; }
+    .sprint-progress-wrap { flex: 1; height: 5px; background: #f0eef4; border-radius: 999px; overflow: hidden; }
+    .sprint-progress-fill { height: 100%; border-radius: 999px; }
+    .sprint-slots-label { font-size: 11px; font-weight: 600; color: #888; white-space: nowrap; }
+    .sprint-detail-hero { padding: 24px 20px 20px; color: #fff; }
+    .sprint-detail-icon { font-size: 48px; margin-bottom: 10px; display: block; }
+    .sprint-detail-title { font-size: 26px; font-weight: 800; line-height: 1.2; margin-bottom: 6px; }
+    .sprint-detail-focus { font-size: 13px; opacity: 0.85; margin-bottom: 14px; }
+    .sprint-detail-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+    .sprint-detail-badge { background: rgba(255,255,255,0.2); border-radius: 999px; padding: 5px 12px; font-size: 12px; font-weight: 600; }
+    .sprint-section { padding: 18px 20px 0; }
+    .sprint-section h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #888; margin-bottom: 10px; }
+    .sprint-section p { font-size: 14px; color: #444; line-height: 1.6; }
+    .rhythm-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .rhythm-list li { font-size: 13px; color: #444; padding: 10px 14px; background: #F2F2F2; border-radius: 10px; }
+    .sprint-outcome-box { background: #010326; border-radius: 14px; padding: 16px 18px; color: #fff; margin: 18px 20px 0; }
+    .sprint-outcome-box .ob-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.55; margin-bottom: 6px; }
+    .sprint-outcome-box .ob-value { font-size: 18px; font-weight: 800; }
+    .sprint-outcome-box .ob-sub { font-size: 12px; opacity: 0.65; margin-top: 4px; line-height: 1.4; }
+    .enroll-cta { margin: 20px 20px 32px; }
+    .sprint-banner { margin: 0 20px 12px; background: linear-gradient(135deg, #010326, #93134B); border-radius: 16px; padding: 16px 18px; color: #fff; cursor: pointer; transition: opacity 0.2s; }
+    .sprint-banner:hover { opacity: 0.92; }
+    .sprint-banner .sb-label { font-size: 11px; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.08em; }
+    .sprint-banner .sb-title { font-size: 17px; font-weight: 700; margin-top: 4px; }
+    .sprint-banner .sb-sub { font-size: 12px; opacity: 0.75; margin-top: 3px; }
 
     /* ===== NEO AI AGENT ===== */
     .neo-fab { position: fixed; bottom: 90px; right: 16px; width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(135deg, #93134B, #F25781); color: #fff; border: none; cursor: pointer; box-shadow: 0 4px 20px rgba(147,19,75,0.38); z-index: 200; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: transform 0.2s, box-shadow 0.2s, background 0.2s; }
@@ -473,6 +520,81 @@ const MENTORS = [
   },
 ];
 
+const SPRINTS = [
+  {
+    id: 1, title: "AI for Business", focus: "Applied Tech & AI", icon: "🤖",
+    color: "#758EBF", bgColor: "#DDE6F3", duration: "2 weeks", startDate: "Mon, 6 Apr 2026",
+    challenge: "Build an AI-powered tool that solves a real operational problem for a local company.",
+    description: "Move from 'I know about AI' to 'I built something with AI.' Over 2 weeks you'll tackle a real business challenge using AI tools, guided by mentors with product and tech backgrounds.",
+    outcome: "Working prototype + pitch deck", outcomeType: "Prototype",
+    skills: ["Validated AI tool", "Product thinking", "Business case writing"],
+    mentorIds: [4, 2], rhythm: ["Morning: skill session (90 min)", "Afternoon: hands-on build", "End of day: mentor check-in"],
+    enrolled: 8, maxEnrolled: 12, status: "open",
+  },
+  {
+    id: 2, title: "Startup Thinking", focus: "Entrepreneurial Mindset", icon: "🚀",
+    color: "#93134B", bgColor: "#EBD3DF", duration: "3 weeks", startDate: "Mon, 13 Apr 2026",
+    challenge: "Identify a real problem in your community and build a validated solution concept.",
+    description: "Not about starting a company — about thinking like a founder. You'll develop the mindset, toolkit and confidence to spot opportunities and move fast on them.",
+    outcome: "Validated concept + investor pitch", outcomeType: "Pitch",
+    skills: ["Problem validation", "Lean canvas", "Pitching to stakeholders"],
+    mentorIds: [1, 3], rhythm: ["Morning: framework + challenge", "Afternoon: fieldwork & validation", "Weekly: mentor review session"],
+    enrolled: 5, maxEnrolled: 10, status: "open",
+  },
+  {
+    id: 3, title: "Lead a Project", focus: "Leadership & Collaboration", icon: "🎯",
+    color: "#3DB742", bgColor: "#D5EED6", duration: "2 weeks", startDate: "Mon, 20 Apr 2026",
+    challenge: "Take full ownership of a cross-functional team project from kickoff to delivery.",
+    description: "Leadership isn't a title — it's a practice. You'll lead a real team through a full project cycle, making real decisions and learning from real mentor feedback.",
+    outcome: "Delivered project + leadership portfolio", outcomeType: "Project",
+    skills: ["Team leadership", "Decision making", "Stakeholder communication"],
+    mentorIds: [2, 5], rhythm: ["Daily standup: team sync (30 min)", "Work blocks: execution", "Retrospective: mentor-guided reflection"],
+    enrolled: 9, maxEnrolled: 10, status: "almost",
+  },
+  {
+    id: 4, title: "Build Your MVP", focus: "Applied Tech & Product", icon: "💻",
+    color: "#F25781", bgColor: "#FDDDE8", duration: "3 weeks", startDate: "Mon, 27 Apr 2026",
+    challenge: "Design and build a working MVP using low/no-code tools for a validated problem.",
+    description: "Stop saying 'I have an idea' and start showing what you can build. Using modern low-code tools and mentor support, you'll go from concept to live product in 3 weeks.",
+    outcome: "Live MVP + demo video", outcomeType: "MVP",
+    skills: ["Product design", "No-code building", "User testing"],
+    mentorIds: [4, 1], rhythm: ["Design sprint: morning", "Build blocks: afternoon", "Weekly demo: mentor feedback session"],
+    enrolled: 3, maxEnrolled: 8, status: "open",
+  },
+  {
+    id: 5, title: "Real-World Problem Solving", focus: "Critical Thinking & Impact", icon: "🔍",
+    color: "#C8970A", bgColor: "#FEF4CC", duration: "1 week", startDate: "Mon, 4 May 2026",
+    challenge: "Solve an open-ended challenge from a regional company in 5 intensive days.",
+    description: "One week. One real company challenge. One team. One deliverable. The most intense sprint we offer — and the one founders say changed how they think.",
+    outcome: "Solution proposal + company presentation", outcomeType: "Solution",
+    skills: ["Systems thinking", "Rapid research", "Presenting under pressure"],
+    mentorIds: [3, 6], rhythm: ["Day 1: Problem brief + team formation", "Days 2–4: Research, ideate, build", "Day 5: Present to the company"],
+    enrolled: 12, maxEnrolled: 12, status: "full",
+    audience: "startup",
+  },
+  {
+    id: 6, title: "Becoming a Mentor", focus: "Coaching & Impact Leadership", icon: "🧭",
+    color: "#010326", bgColor: "#e8e8f0", duration: "2 weeks", startDate: "Mon, 11 May 2026",
+    challenge: "Guide 3 early-stage founders through a real challenge — and build your own reflective practice as a mentor.",
+    description: "Being good at something doesn't automatically make you good at guiding others. This sprint helps experienced professionals make the transition from expert to mentor — building the listening, questioning and feedback skills that make mentoring actually land.",
+    outcome: "Mentor profile + 3 guided sessions + reflection portfolio", outcomeType: "Portfolio",
+    skills: ["Active listening", "Coaching questions", "Structured feedback", "Mentor positioning"],
+    mentorIds: [1, 3],
+    rhythm: ["Week 1: Frameworks for coaching + live practice sessions", "Week 2: 3 real mentor sessions with startup founders", "End: Reflection review with senior mentor"],
+    enrolled: 4, maxEnrolled: 8, status: "open",
+    audience: "mentor",
+  },
+];
+
+const MY_GRADUATE = {
+  id: "g1", name: "Jana Kovač", initials: "JK", color: "#758EBF",
+  degree: "Bachelor Business & Innovation", university: "UCLL · Leuven",
+  graduatedYear: "2025", location: "Leuven, BE",
+  status: "Looking for direction",
+  gaps: ["Applied tech experience", "Real-world project ownership", "Entrepreneurial confidence"],
+  enrolledSprints: [],
+};
+
 const MY_STARTUP = {
   id: "s1",
   name: "Alex Martens",
@@ -568,19 +690,14 @@ const state = {
   mySessions: [...SESSIONS_DATA],
   mentorRequests: [...MENTOR_REQUESTS],
   dismissedRequests: [],
+  selectedSprintId: null,
+  enrolledSprints: [],
   neo: {
     open: false,
     mesneos: [],
     initialized: false,
   },
 };
-
-/* ============================================================
-   ICON HELPER (Lucide)
-   ============================================================ */
-function icon(name, size = 20) {
-  return `<i data-lucide="${name}" style="width:${size}px;height:${size}px;display:inline-flex;"></i>`;
-}
 
 /* ============================================================
    ROUTER
@@ -605,7 +722,6 @@ function render() {
     const existing = document.getElementById("neo-overlay");
     if (existing) existing.remove();
     attachSplashListeners();
-    if (window.lucide) lucide.createIcons();
     return;
   }
 
@@ -617,6 +733,8 @@ function render() {
     sessions: renderSessions,
     profile: renderProfile,
     ai_match: renderAIMatch,
+    sprint_discover: renderSprintDiscover,
+    sprint_detail: renderSprintDetail,
   };
 
   const contentFn = viewMap[state.view] || renderDashboard;
@@ -647,7 +765,6 @@ function render() {
     const msgs = document.getElementById("neo-msgs");
     if (msgs) msgs.scrollTop = msgs.scrollHeight;
   }
-  if (window.lucide) lucide.createIcons();
 }
 
 /* ============================================================
@@ -680,26 +797,34 @@ function renderTopNav() {
    BOTTOM NAV
    ============================================================ */
 function renderBottomNav() {
-  const items = state.role === "startup"
+  const items = state.role === "graduate"
     ? [
-        { icon: "house",      label: "Home",     view: "dashboard" },
-        { icon: "compass",    label: "Discover", view: "discover" },
-        { icon: "sparkles",   label: "Neo",      view: "ai_match" },
-        { icon: "calendar",   label: "Sessions", view: "sessions" },
-        { icon: "user",       label: "Profile",  view: "profile" },
+        { icon: "🏠", label: "Home",    view: "dashboard" },
+        { icon: "🏃", label: "Sprints", view: "sprint_discover" },
+        { icon: "🕶️", label: "Neo",    view: "ai_match" },
+        { icon: "🔍", label: "Mentors", view: "discover" },
+        { icon: "👤", label: "Profile", view: "profile" },
+      ]
+    : state.role === "startup"
+    ? [
+        { icon: "🏠", label: "Home",     view: "dashboard" },
+        { icon: "🔍", label: "Discover", view: "discover" },
+        { icon: "🕶️", label: "Neo",     view: "ai_match" },
+        { icon: "📅", label: "Sessions", view: "sessions" },
+        { icon: "👤", label: "Profile",  view: "profile" },
       ]
     : [
-        { icon: "house",      label: "Home",     view: "dashboard" },
-        { icon: "inbox",      label: "Requests", view: "sessions" },
-        { icon: "calendar",   label: "Sessions", view: "sessions" },
-        { icon: "user",       label: "Profile",  view: "profile" },
+        { icon: "🏠", label: "Home",     view: "dashboard" },
+        { icon: "📨", label: "Requests", view: "sessions" },
+        { icon: "📅", label: "Sessions", view: "sessions" },
+        { icon: "👤", label: "Profile",  view: "profile" },
       ];
 
   return `
     <nav class="bottom-nav">
       ${items.map(item => `
         <button class="nav-item ${state.view === item.view ? "active" : ""}" onclick="navigate('${item.view}')">
-          <span class="nav-icon">${icon(item.icon, 22)}</span>
+          <span class="nav-icon">${item.icon}</span>
           <span class="nav-label">${item.label}</span>
         </button>
       `).join("")}
@@ -717,14 +842,14 @@ function renderSplash() {
       <p class="splash-tagline">The smart platform connecting<br>startups with the right mentors.</p>
       <div class="splash-roles">
         <button class="role-card startup" id="role-startup">
-          <span class="role-icon">${icon("rocket", 36)}</span>
+          <span class="role-icon">🚀</span>
           <div class="role-info">
             <div class="role-title">I'm a Startup</div>
             <div class="role-desc">Find mentors, book sessions, grow faster with the right guidance.</div>
           </div>
         </button>
         <button class="role-card mentor" id="role-mentor">
-          <span class="role-icon">${icon("award", 36)}</span>
+          <span class="role-icon">🧭</span>
           <div class="role-info">
             <div class="role-title">I'm a Mentor</div>
             <div class="role-desc">Share your expertise, accept requests, and build your impact portfolio.</div>
@@ -758,6 +883,7 @@ function attachSplashListeners() {
    ============================================================ */
 function renderDashboard() {
   if (state.role === "mentor") return renderMentorDashboard();
+  if (state.role === "graduate") return renderGraduateDashboard();
 
   const upcomingSession = state.mySessions.find(s => s.status === "upcoming");
   const completedCount = state.mySessions.filter(s => s.status === "completed").length;
@@ -765,7 +891,7 @@ function renderDashboard() {
 
   return `
     <div class="dashboard-hello">
-      <div class="hello-line">Good morning</div>
+      <div class="hello-line">Good morning 👋</div>
       <div class="hello-name">${MY_STARTUP.name}</div>
       <div class="hello-sub">${MY_STARTUP.startupName} · ${MY_STARTUP.stage} Stage</div>
     </div>
@@ -786,9 +912,9 @@ function renderDashboard() {
     </div>
 
     ${upcomingSession ? `
-    <div class="section-title">Next Session</div>
+    <div class="section-title">📅 Next Session</div>
     <div class="session-card" onclick="navigate('sessions')">
-      <div class="session-meta">${upcomingSession.date} · ${upcomingSession.time}</div>
+      <div class="session-meta">⏰ ${upcomingSession.date} · ${upcomingSession.time}</div>
       <div class="session-title">${upcomingSession.topic}</div>
       <div class="session-with">with ${upcomingSession.mentorName}</div>
       <span class="session-status status-upcoming">Upcoming</span>
@@ -796,12 +922,20 @@ function renderDashboard() {
     ` : ""}
 
     <div class="ai-banner" onclick="navigate('ai_match')">
-      <div class="ai-label">Neo — AI Mentor Agent</div>
+      <div class="ai-label">🕶️ Neo — AI Mentor Agent</div>
       <div class="ai-title">3 new mentor matches <span class="ai-arrow">→</span></div>
       <div class="ai-sub">Based on your challenge: go-to-market strategy</div>
     </div>
 
-    <div class="section-title">Top Matches for You</div>
+    <div class="section-title">🏃 Career Sprints</div>
+    <div class="sprint-banner" onclick="navigate('sprint_discover')">
+      <div class="sb-label">Close the gap before it costs you</div>
+      <div class="sb-title">5 sprints open now — 1 to 3 weeks →</div>
+      <div class="sb-sub">Real challenges · Mentor-guided · Tangible outcome you can show</div>
+    </div>
+    ${SPRINTS.filter(s => s.status !== "full" && s.audience !== "mentor").slice(0,2).map(s => sprintCard(s)).join("")}
+
+    <div class="section-title">⭐ Top Matches for You</div>
     ${topMatches.map(m => mentorMatchCard(m)).join("")}
 
     <div class="spacer"></div>
@@ -814,7 +948,7 @@ function renderMentorDashboard() {
 
   return `
     <div class="dashboard-hello">
-      <div class="hello-line">Welcome back</div>
+      <div class="hello-line">Welcome back 👋</div>
       <div class="hello-name">${MY_MENTOR_PROFILE.name}</div>
       <div class="hello-sub">${MY_MENTOR_PROFILE.title}</div>
     </div>
@@ -835,17 +969,20 @@ function renderMentorDashboard() {
     </div>
 
     ${upcomingSession ? `
-    <div class="section-title">Next Session</div>
+    <div class="section-title">📅 Next Session</div>
     <div class="session-card blue-border" onclick="navigate('sessions')">
-      <div class="session-meta">${upcomingSession.date} · ${upcomingSession.time}</div>
+      <div class="session-meta">⏰ ${upcomingSession.date} · ${upcomingSession.time}</div>
       <div class="session-title">${upcomingSession.topic}</div>
       <div class="session-with">with ${upcomingSession.mentorName}</div>
       <span class="session-status status-upcoming">Upcoming</span>
     </div>
     ` : ""}
 
-    <div class="section-title">Pending Requests <span class="badge-new">${activeRequests.length}</span></div>
+    <div class="section-title">📨 Pending Requests <span class="badge-new">${activeRequests.length}</span></div>
     ${activeRequests.map(r => requestCard(r)).join("")}
+
+    <div class="section-title">🧭 For You</div>
+    ${sprintCard(SPRINTS.find(s => s.id === 6))}
 
     <div class="spacer"></div>
   `;
@@ -874,7 +1011,7 @@ function mentorMatchCard(mentor) {
 function requestCard(req) {
   return `
     <div class="request-card" id="req-${req.id}">
-      <div class="req-from">${req.startup} · ${req.stage} Stage</div>
+      <div class="req-from">🚀 ${req.startup} · ${req.stage} Stage</div>
       <div class="req-title">${req.topic}</div>
       <div class="req-meta">from ${req.founder} · ${req.date}</div>
       <div class="req-meta" style="margin-top:6px;font-size:12px;color:#555;">"${req.mesneo}"</div>
@@ -912,7 +1049,7 @@ function renderDiscover() {
     </div>
 
     <div class="search-bar">
-      <span class="search-icon">${icon("search", 16)}</span>
+      <span class="search-icon">🔍</span>
       <input id="search-input" type="text" placeholder="Search by name, skill, sector…" value="${state.searchQuery}"/>
     </div>
 
@@ -925,7 +1062,7 @@ function renderDiscover() {
     <div class="mentor-grid" id="mentor-grid">
       ${filtered.length > 0
         ? filtered.map(m => mentorGridCard(m)).join("")
-        : `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">${icon("users", 56)}</div><h3>No mentors found</h3><p>Try a different search or filter.</p></div></div>`
+        : `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">🔍</div><h3>No mentors found</h3><p>Try a different search or filter.</p></div></div>`
       }
     </div>
     <div class="spacer"></div>
@@ -941,7 +1078,7 @@ function mentorGridCard(mentor) {
       <div class="card-tags">
         ${mentor.expertise.slice(0, 2).map((e, i) => `<span class="tag ${["pink","blue","green","amber","purple"][i % 5]}" style="font-size:10px;padding:2px 7px">${e}</span>`).join("")}
       </div>
-      <div class="card-rating">★ ${mentor.rating} · ${mentor.sessions} sessions</div>
+      <div class="card-rating">⭐ ${mentor.rating} · ${mentor.sessions} sessions</div>
     </div>
   `;
 }
@@ -963,9 +1100,9 @@ function renderMentorProfile() {
         <div class="profile-hero-info">
           <div class="profile-name">${mentor.name}</div>
           <div class="profile-title">${mentor.title}</div>
-          <div class="profile-location">${mentor.location} · ${mentor.company}</div>
+          <div class="profile-location">📍 ${mentor.location} · ${mentor.company}</div>
           <div class="profile-rating-row">
-            <span class="profile-rating">★ ${mentor.rating}</span>
+            <span class="profile-rating">⭐ ${mentor.rating}</span>
             <span class="profile-sessions-count">${mentor.sessions} sessions given</span>
           </div>
         </div>
@@ -994,7 +1131,7 @@ function renderMentorProfile() {
     <div class="profile-section">
       <h3>Languages</h3>
       <div class="tags-wrap">
-        ${mentor.languages.map(l => `<span class="tag gray">${l}</span>`).join("")}
+        ${mentor.languages.map(l => `<span class="tag gray">🌐 ${l}</span>`).join("")}
       </div>
     </div>
 
@@ -1028,7 +1165,7 @@ function renderMentorProfile() {
 
     <div class="book-cta">
       <button class="btn-primary" onclick="startBooking(${mentor.id})">
-        Book a Session with ${mentor.name.split(" ")[0]}
+        📅 Book a Session with ${mentor.name.split(" ")[0]}
       </button>
     </div>
   `;
@@ -1073,12 +1210,12 @@ function renderBooking() {
 
 function renderTopicStep() {
   const topics = [
-    { icon: icon("target",      24), name: "Product Strategy" },
-    { icon: icon("dollar-sign", 24), name: "Fundraising" },
-    { icon: icon("globe",       24), name: "Go-to-Market" },
-    { icon: icon("cpu",         24), name: "Tech & Architecture" },
-    { icon: icon("bar-chart-2", 24), name: "Positioning" },
-    { icon: icon("trending-up", 24), name: "Unit Economics" },
+    { icon: "💡", name: "Product Strategy" },
+    { icon: "📈", name: "Fundraising" },
+    { icon: "📣", name: "Go-to-Market" },
+    { icon: "⚙️", name: "Tech & Architecture" },
+    { icon: "🎯", name: "Positioning" },
+    { icon: "💰", name: "Unit Economics" },
   ];
   return `
     <div class="topic-grid">
@@ -1167,7 +1304,7 @@ function renderConfirmStep(mentor) {
         </div>
         <div class="confirm-row">
           <span class="label">Format</span>
-          <span class="value">Video Call</span>
+          <span class="value">📹 Video Call</span>
         </div>
       </div>
       <button class="btn-primary green" onclick="confirmBooking()">✓ Confirm Booking</button>
@@ -1179,7 +1316,7 @@ function renderConfirmStep(mentor) {
 function renderBookingSuccess(mentor) {
   return `
     <div class="success-screen">
-      <div class="success-icon">${icon("check-circle", 72)}</div>
+      <div class="success-icon">🎉</div>
       <h2>Session Booked!</h2>
       <p>Your session with <strong>${mentor.name}</strong> on <strong>${state.booking.topic}</strong> is confirmed.<br>You'll receive a calendar invite shortly.</p>
       <button class="btn-primary" onclick="navigate('sessions')" style="max-width:300px;margin:0 auto;display:block;">View My Sessions</button>
@@ -1214,14 +1351,14 @@ function renderSessions() {
       ${sessions.length > 0
         ? sessions.map(s => `
           <div class="session-card${borderMap[s.mentorColor] || ""}">
-            <div class="session-meta">${s.date} · ${s.time}</div>
+            <div class="session-meta">⏰ ${s.date} · ${s.time}</div>
             <div class="session-title">${s.topic}</div>
             <div class="session-with">with ${s.mentorName}</div>
             ${s.notes ? `<div style="font-size:11px;color:#888;margin-top:4px;font-style:italic;">"${s.notes}"</div>` : ""}
             <span class="session-status ${s.status === "upcoming" ? "status-upcoming" : "status-completed"}">${s.status === "upcoming" ? "Upcoming" : "Completed"}</span>
           </div>
         `).join("")
-        : `<div class="empty-state"><div class="empty-icon">${tab === "upcoming" ? icon("calendar", 56) : icon("check-circle", 56)}</div><h3>No ${tab} sessions</h3><p>${tab === "upcoming" ? "Book a session with a mentor to get started." : "Your completed sessions will appear here."}</p></div>`
+        : `<div class="empty-state"><div class="empty-icon">${tab === "upcoming" ? "📅" : "📋"}</div><h3>No ${tab} sessions</h3><p>${tab === "upcoming" ? "Book a session with a mentor to get started." : "Your completed sessions will appear here."}</p></div>`
       }
     </div>
 
@@ -1246,7 +1383,7 @@ function renderProfile() {
     <div class="profile-page">
       <div class="profile-page-hero">
         <div class="profile-page-avatar" style="background:${profile.color}">
-        ${profile.photo ? `<img src="${profile.photo}" alt="${profile.name}" onerror="this.style.display='none'">` : profile.initials}
+        ${profile.photo ? `<img src="${profile.photo}" alt="${profile.name}" onerror="this.style.display='none';this.parentElement.innerHTML='${profile.initials || ''}'">` : profile.initials}
       </div>
         <div class="p-name">${profile.name}</div>
         <div class="p-role">${isStartup ? profile.startupName + " · " + profile.stage : profile.title}</div>
@@ -1277,7 +1414,7 @@ function renderProfile() {
         <div class="profile-info-card">
           <h4>Mentor Stats</h4>
           <div class="info-row"><span class="info-label">Sessions given</span><span class="info-value">${profile.sessions}</span></div>
-          <div class="info-row"><span class="info-label">Rating</span><span class="info-value">★ ${profile.rating}</span></div>
+          <div class="info-row"><span class="info-label">Rating</span><span class="info-value">⭐ ${profile.rating}</span></div>
           <div class="info-row"><span class="info-label">Organisation</span><span class="info-value">${profile.company}</span></div>
           <div class="info-row"><span class="info-label">Location</span><span class="info-value">${profile.location}</span></div>
         </div>
@@ -1305,7 +1442,7 @@ function renderAIMatch() {
   return `
     <div class="ai-screen">
       <div class="ai-header">
-        <div class="ai-h-label">Neo — AI Mentor Agent</div>
+        <div class="ai-h-label">🕶️ Neo — AI Mentor Agent</div>
         <div class="ai-h-title">Your Top Mentor Matches</div>
         <div class="ai-h-sub">Personalised for SkillBridge · ${MY_STARTUP.stage} Stage · ${MY_STARTUP.sector}</div>
       </div>
@@ -1353,8 +1490,7 @@ function attachEventListeners() {
         });
         grid.innerHTML = filtered.length > 0
           ? filtered.map(m => mentorGridCard(m)).join("")
-          : `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">${icon("users", 56)}</div><h3>No mentors found</h3><p>Try a different search or filter.</p></div></div>`;
-        if (window.lucide) lucide.createIcons();
+          : `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">🔍</div><h3>No mentors found</h3><p>Try a different search or filter.</p></div></div>`;
       }
     });
   }
@@ -1366,6 +1502,207 @@ function attachEventListeners() {
       navigate("discover");
     });
   });
+}
+
+/* ============================================================
+   GRADUATE DASHBOARD
+   ============================================================ */
+function renderGraduateDashboard() {
+  const openSprints = SPRINTS.filter(s => s.status !== "full");
+  const enrolled = state.enrolledSprints.length;
+  return `
+    <div class="dashboard-hello">
+      <div class="hello-line">Good morning 👋</div>
+      <div class="hello-name">${MY_GRADUATE.name}</div>
+      <div class="hello-sub">${MY_GRADUATE.degree} · ${MY_GRADUATE.university}</div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card blue">
+        <div class="stat-value">${SPRINTS.length}</div>
+        <div class="stat-label">Sprints available</div>
+      </div>
+      <div class="stat-card pink">
+        <div class="stat-value">${enrolled}</div>
+        <div class="stat-label">Enrolled</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-value">${MENTORS.length}</div>
+        <div class="stat-label">Mentors</div>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:4px;">📍 Your Talent Journey</div>
+    <div class="sprint-funnel">
+      <div class="funnel-label">Where you are now</div>
+      <div class="funnel-steps">
+        <div class="funnel-step done"><span class="fs-icon">🎓</span>Graduated</div>
+        <div class="funnel-arrow">→</div>
+        <div class="funnel-step active"><span class="fs-icon">🏃</span>Career Sprint</div>
+        <div class="funnel-arrow">→</div>
+        <div class="funnel-step next"><span class="fs-icon">💼</span>Job Ready</div>
+        <div class="funnel-arrow">→</div>
+        <div class="funnel-step next"><span class="fs-icon">🚀</span>Work</div>
+      </div>
+    </div>
+
+    <div class="ai-banner" onclick="navigate('ai_match')">
+      <div class="sb-label">🕶️ Neo · AI Mentor Agent</div>
+      <div class="sb-title">Not sure where to start? Ask Neo →</div>
+      <div class="sb-sub">Neo will match you to the right sprint based on your gaps</div>
+    </div>
+
+    <div class="section-title">🏃 Recommended Sprints</div>
+    ${openSprints.slice(0, 3).map(s => sprintCard(s)).join("")}
+    <div style="padding: 0 20px 4px;">
+      <button class="btn-secondary" onclick="navigate('sprint_discover')">See all ${SPRINTS.length} sprints →</button>
+    </div>
+    <div class="spacer"></div>
+  `;
+}
+
+/* ============================================================
+   SPRINT CARD COMPONENT
+   ============================================================ */
+function sprintCard(sprint) {
+  const mentors = sprint.mentorIds.map(id => MENTORS.find(m => m.id === id)).filter(Boolean);
+  const pct = Math.round((sprint.enrolled / sprint.maxEnrolled) * 100);
+  const statusLabel = { open: "Open", almost: "Almost Full", full: "Full" }[sprint.status];
+  return `
+    <div class="sprint-card" onclick="navigate('sprint_detail', {selectedSprintId: ${sprint.id}})">
+      <div class="sprint-card-inner" style="border-left: 4px solid ${sprint.color}">
+        <div class="sprint-card-top">
+          <div class="sprint-icon-wrap" style="background:${sprint.bgColor}">${sprint.icon}</div>
+          <div class="sprint-card-meta">
+            <span class="sprint-duration" style="background:${sprint.bgColor};color:${sprint.color}">⏱ ${sprint.duration}</span>
+            <span class="sprint-status ${sprint.status}">${statusLabel}</span>
+          </div>
+        </div>
+        <div class="sprint-title">${sprint.title}</div>
+        <div class="sprint-focus-label">${sprint.focus}</div>
+        <div class="sprint-outcome-row">
+          <span style="font-size:13px">🏆</span>
+          <span class="so-value">${sprint.outcome}</span>
+        </div>
+        <div class="sprint-mentors-row">
+          ${mentors.map(m => `<div class="sprint-mentor-mini" style="background:${m.color}">${m.initials}</div>`).join("")}
+          <span class="sprint-mentors-label">Guided by ${mentors.map(m => m.name.split(" ")[0]).join(" & ")}</span>
+        </div>
+        <div class="sprint-enroll-bar">
+          <div class="sprint-progress-wrap"><div class="sprint-progress-fill" style="width:${pct}%;background:${sprint.color}"></div></div>
+          <span class="sprint-slots-label">${sprint.enrolled}/${sprint.maxEnrolled} enrolled</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ============================================================
+   SPRINT DISCOVER
+   ============================================================ */
+function renderSprintDiscover() {
+  const filters = ["All", "Tech & AI", "Entrepreneurship", "Leadership", "Impact"];
+  return `
+    <div class="section-header">
+      <h2>Career Sprints</h2>
+      <p>${SPRINTS.length} sprints · Closing skill gaps, fast</p>
+    </div>
+    <div class="filter-row">
+      ${filters.map(f => `<button class="filter-chip ${f === "All" ? "active" : ""}">${f}</button>`).join("")}
+    </div>
+    <div style="margin-top:16px;">
+      ${SPRINTS.map(s => sprintCard(s)).join("")}
+    </div>
+    <div class="spacer"></div>
+  `;
+}
+
+/* ============================================================
+   SPRINT DETAIL
+   ============================================================ */
+function renderSprintDetail() {
+  const sprint = SPRINTS.find(s => s.id === state.selectedSprintId);
+  if (!sprint) return `<div class="empty-state"><h3>Sprint not found</h3></div>`;
+  const mentors = sprint.mentorIds.map(id => MENTORS.find(m => m.id === id)).filter(Boolean);
+  const isEnrolled = state.enrolledSprints.includes(sprint.id);
+  const pct = Math.round((sprint.enrolled / sprint.maxEnrolled) * 100);
+  const statusLabel = { open: "Open", almost: "Almost Full", full: "Full" }[sprint.status];
+  return `
+    <div class="sprint-detail-hero" style="background:${sprint.color}">
+      <button class="back-btn" style="color:#fff;opacity:0.85;margin-bottom:14px;" onclick="navigate(state._prevView || 'sprint_discover')">← Back</button>
+      <span class="sprint-detail-icon">${sprint.icon}</span>
+      <div class="sprint-detail-title">${sprint.title}</div>
+      <div class="sprint-detail-focus">${sprint.focus}</div>
+      <div class="sprint-detail-badges">
+        <span class="sprint-detail-badge">⏱ ${sprint.duration}</span>
+        <span class="sprint-detail-badge">🗓 Starts ${sprint.startDate}</span>
+        <span class="sprint-detail-badge">${statusLabel}</span>
+      </div>
+    </div>
+
+    <div class="sprint-section">
+      <h3>What this sprint is about</h3>
+      <p>${sprint.description}</p>
+    </div>
+
+    <div class="sprint-section">
+      <h3>Your Challenge</h3>
+      <p style="background:#F2F2F2;border-radius:12px;padding:14px;border-left:3px solid ${sprint.color};">${sprint.challenge}</p>
+    </div>
+
+    <div class="sprint-section">
+      <h3>Daily Rhythm</h3>
+      <ul class="rhythm-list">
+        ${sprint.rhythm.map(r => `<li>${r}</li>`).join("")}
+      </ul>
+    </div>
+
+    <div class="sprint-section">
+      <h3>Your Mentors</h3>
+      ${mentors.map(m => `
+        <div class="match-card" style="margin:0 0 10px;" onclick="navigate('mentor_profile', {selectedMentorId:${m.id}})">
+          <div class="mentor-avatar" style="background:${m.color}">${m.initials}</div>
+          <div class="match-info">
+            <div class="mentor-name">${m.name}</div>
+            <div class="mentor-title">${m.title}</div>
+            <div class="match-tags">${m.expertise.slice(0,2).map((e,i)=>`<span class="tag ${["pink","blue"][i]}">${e}</span>`).join("")}</div>
+          </div>
+        </div>`).join("")}
+    </div>
+
+    <div class="sprint-section">
+      <h3>Skills you'll prove</h3>
+      <div class="tags-wrap">
+        ${sprint.skills.map(s => `<span class="tag green">✓ ${s}</span>`).join("")}
+      </div>
+    </div>
+
+    <div class="sprint-outcome-box">
+      <div class="ob-label">🏆 Your Sprint Outcome</div>
+      <div class="ob-value">${sprint.outcome}</div>
+      <div class="ob-sub">A visible, mentor-reviewed deliverable you can add to your portfolio</div>
+    </div>
+
+    <div class="sprint-section">
+      <h3>Enrollment</h3>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+        <div class="sprint-progress-wrap" style="flex:1;height:8px;">
+          <div class="sprint-progress-fill" style="width:${pct}%;background:${sprint.color}"></div>
+        </div>
+        <span style="font-size:13px;font-weight:600;color:#010326;">${sprint.enrolled}/${sprint.maxEnrolled}</span>
+      </div>
+    </div>
+
+    <div class="enroll-cta">
+      ${sprint.status === "full"
+        ? `<button class="btn-primary" style="background:#888;cursor:not-allowed">This sprint is full</button>
+           <button class="btn-secondary" onclick="navigate('sprint_discover')">See other sprints</button>`
+        : isEnrolled
+        ? `<button class="btn-primary green" style="cursor:default">✓ You're enrolled</button>
+           <button class="btn-secondary" onclick="unenrollSprint(${sprint.id})">Cancel enrollment</button>`
+        : `<button class="btn-primary" style="background:${sprint.color}" onclick="enrollSprint(${sprint.id})">🏃 Enroll in this Sprint</button>`
+      }
+    </div>
+  `;
 }
 
 /* ============================================================
@@ -1412,6 +1749,22 @@ function confirmBooking() {
   render();
 }
 
+function enrollSprint(sprintId) {
+  if (!state.enrolledSprints.includes(sprintId)) {
+    state.enrolledSprints.push(sprintId);
+    const sprint = SPRINTS.find(s => s.id === sprintId);
+    if (sprint) sprint.enrolled = Math.min(sprint.enrolled + 1, sprint.maxEnrolled);
+  }
+  render();
+}
+
+function unenrollSprint(sprintId) {
+  state.enrolledSprints = state.enrolledSprints.filter(id => id !== sprintId);
+  const sprint = SPRINTS.find(s => s.id === sprintId);
+  if (sprint) sprint.enrolled = Math.max(sprint.enrolled - 1, 0);
+  render();
+}
+
 function addHour(time) {
   const [h, m] = time.split(":").map(Number);
   return `${String(h + 1).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
@@ -1447,10 +1800,10 @@ function declineRequest(id) {
    ============================================================ */
 
 const NEO_QUICK_REPLIES = [
-  { label: "Find me a mentor",  text: "find me a mentor" },
-  { label: "Fundraising help",  text: "fundraising" },
-  { label: "My top matches ✦",  text: "show my top matches" },
-  { label: "Prep a session",    text: "prep for my next session" },
+  { label: "Find me a mentor 🔍", text: "find me a mentor" },
+  { label: "Career Sprints 🏃",   text: "tell me about career sprints" },
+  { label: "My top matches ✦",    text: "show my top matches" },
+  { label: "Prep a session 📋",   text: "prep for my next session" },
 ];
 
 function toggleNeo() {
@@ -1458,7 +1811,7 @@ function toggleNeo() {
   if (state.neo.open && !state.neo.initialized) {
     state.neo.initialized = true;
     setTimeout(() => {
-      addNeoMsg("neo", "I'm **Neo** — I know the system.\n\nTell me what you're working on and I'll find exactly the right mentor. No guessing, no generic lists.");
+      addNeoMsg("neo", "I'm **Neo** — I know the system. 🕶️\n\nTell me what you're working on and I'll find exactly the right mentor. No guessing, no generic lists.");
       refreshNeoPanel();
     }, 350);
   }
@@ -1515,43 +1868,51 @@ function neoBotReply(input) {
   // Fundraising / investors
   if (/fundrais|investor|pitch|raise|capital|seed|series|vc|angel/.test(input)) {
     return {
-      text: "For fundraising, **Sarah Chen** is your person. 2 exits, active angel investor, deep European VC network. She knows what investors actually want to hear — and what kills a deal.",
+      text: "💰 For fundraising, **Sarah Chen** is your person. 2 exits, active angel investor, deep European VC network. She knows what investors actually want to hear — and what kills a deal.",
       card: MENTORS.find(m => m.id === 1),
     };
   }
   // Product / UX / MVP
   if (/product|ux|design|user research|mvp|feature|roadmap|prioriti/.test(input)) {
     return {
-      text: "**Nico Dubois** (ex-Spotify) is your go-to for product thinking. Exceptional at helping founders cut scope ruthlessly and ship what actually matters to users.",
+      text: "🎯 **Nico Dubois** (ex-Spotify) is your go-to for product thinking. Exceptional at helping founders cut scope ruthlessly and ship what actually matters to users.",
       card: MENTORS.find(m => m.id === 2),
     };
   }
   // Marketing / Growth / Positioning
-  if (/market|growth|brand|content|acqui|position|story|mesneo|customer|gtm|go.to.market/.test(input)) {
+  if (/market|growth|brand|content|acqui|position|story|message|customer|gtm|go.to.market/.test(input)) {
     return {
-      text: "**Priya Nair** has taken 40+ startups from 0 to their first 1000 users. Her edge is positioning — making your message land with the people who need to hear it most.",
+      text: "📣 **Priya Nair** has taken 40+ startups from 0 to their first 1000 users. Her edge is positioning — making your message land with the people who need to hear it most.",
       card: MENTORS.find(m => m.id === 5),
     };
   }
   // Tech / Engineering / AI / CTO
   if (/tech|code|engineer|architect|ai|ml|machine learn|cto|stack|backend|infra|build/.test(input)) {
     return {
-      text: "**Lars Henriksen** is who you want for tech decisions — Philips background, CTO at 2 startups, deep AI/ML experience. He saves founders from architecture mistakes that cost them later.",
+      text: "⚙️ **Lars Henriksen** is who you want for tech decisions — Philips background, CTO at 2 startups, deep AI/ML experience. He saves founders from architecture mistakes that cost them later.",
       card: MENTORS.find(m => m.id === 4),
     };
   }
   // Impact / Rural / Social / Sustainability
   if (/impact|rural|social|sustain|grant|mission|community|region|ecosystem/.test(input)) {
     return {
-      text: "**Amara Diallo** built RuralBridge from scratch. She gets mission-driven entrepreneurship — especially how to create real regional impact with limited resources and a big vision.",
+      text: "🌱 **Amara Diallo** built RuralBridge from scratch. She gets mission-driven entrepreneurship — especially how to create real regional impact with limited resources and a big vision.",
       card: MENTORS.find(m => m.id === 3),
     };
   }
   // Finance / Unit economics / Numbers
   if (/financ|unit econ|pric|revenue|model|cfo|numbers|investor ready|burn|runway/.test(input)) {
     return {
-      text: "**Jonas Weiss** makes financial modelling and unit economics actually understandable for founders. Essential prep before any serious investor conversation.",
+      text: "📊 **Jonas Weiss** makes financial modelling and unit economics actually understandable for founders. Essential prep before any serious investor conversation.",
       card: MENTORS.find(m => m.id === 6),
+    };
+  }
+  // Career Sprints — trigger on uncertainty, graduate signals, skill gaps
+  if (/sprint|career|graduate|skill gap|not sure|direction|confiden|job ready|first job|entry|alumni|diploma|just graduated|where to start/.test(input)) {
+    return {
+      text: "🏃 Career Sprints are built exactly for this.\n\nShort, intense, mentor-guided — you come out with a **real deliverable** and a **validated skill signal** employers can see.\n\nBased on what you said, I'd look at:\n\n**AI for Business** (2 weeks) — if you want applied tech confidence\n**Startup Thinking** (3 weeks) — if you want direction and entrepreneurial mindset\n\nWant to see all 5 sprints?",
+      card: null,
+      action: { label: "See all Sprints 🏃", fn: "navigate('sprint_discover')" },
     };
   }
   // Top matches / All mentors
@@ -1564,14 +1925,14 @@ function neoBotReply(input) {
   // Session prep
   if (/prep|session|ready|next session|question|before|meeting|what to bring/.test(input)) {
     return {
-      text: "Smart move. Three things to do before any mentor session:\n\n**1.** Write your biggest blocker in one clear sentence\n**2.** Bring 2–3 specific questions — not vague ones\n**3.** Have a concrete ask: what decision do you need help making?\n\nWhat's the topic of your next session? I'll tailor this more.",
+      text: "📋 Smart move. Three things to do before any mentor session:\n\n**1.** Write your biggest blocker in one clear sentence\n**2.** Bring 2–3 specific questions — not vague ones\n**3.** Have a concrete ask: what decision do you need help making?\n\nWhat's the topic of your next session? I'll tailor this more.",
       card: null,
     };
   }
   // Greetings
   if (/^(hello|hi|hey|sup|yo|start|what can|help)/.test(input.trim())) {
     return {
-      text: "I'm here.\n\n• Right mentor for your challenge\n• Your top AI-matched mentors\n• Session prep that actually works\n\nWhat are you working on?",
+      text: "I'm here. 🕶️\n\n• Right mentor for your challenge\n• Your top AI-matched mentors\n• Session prep that actually works\n\nWhat are you working on?",
       card: null,
     };
   }
